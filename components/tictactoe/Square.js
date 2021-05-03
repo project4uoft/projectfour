@@ -1,11 +1,12 @@
 import React from "react";
 
 const Square = ({ value, onClick }) => {
-  const style = value ? `squares ${value}` : `squares`;
-
   return (
-    <button className="bg-gray-200 text-6xl cursor-pointer" onClick={onClick}>
-      {value}
+    <button
+      className="text-6xl cursor-pointer z-10 focus:outline-none"
+      onClick={onClick}
+    >
+      <img src={`./assets/images/${value}.png`} className="p-1" />
     </button>
   );
 };

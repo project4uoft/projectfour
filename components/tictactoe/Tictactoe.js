@@ -7,7 +7,7 @@ const TicTacToe = () => {
   const [stepNumber, setStepNumber] = useState(0);
   const [xIsNext, setXisNext] = useState(true);
   const winner = calculateWinner(history[stepNumber]);
-  const xO = xIsNext ? "X" : "O";
+  const xO = xIsNext ? "x" : "o";
 
   const handleClick = (i) => {
     const historyPoint = history.slice(0, stepNumber + 1);
@@ -39,13 +39,15 @@ const TicTacToe = () => {
 
   return (
     <>
-      <Board squares={history[stepNumber]} onClick={handleClick} />
-      <div className="flex space-x-4">
+      <div className="flex justify-around w-screen">
+        <h3 className="text-2xl font-semibold text-indigo-700">
+          {winner ? "Winner: " + winner : "Next Player: " + xO}
+        </h3>
+        <Board squares={history[stepNumber]} onClick={handleClick} />
         <div>
-          <h3>History</h3>
+          <h3 className="text-2xl font-semibold text-indigo-700">History</h3>
           {renderMoves()}
         </div>
-        <h3>{winner ? "Winner: " + winner : "Next Player: " + xO}</h3>
       </div>
     </>
   );
