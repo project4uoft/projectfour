@@ -41,7 +41,7 @@ const TicTacToe = () => {
     <>
       <div className="flex justify-around w-screen">
         <h3 className="text-2xl font-semibold text-indigo-700">
-          {winner ? "Winner: " + winner : "Next Player: " + xO}
+          {winner ? "Winner: " + winner.toUpperCase() : "Next Player: " + xO}
         </h3>
         <Board squares={history[stepNumber]} onClick={handleClick} />
         <div>
