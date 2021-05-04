@@ -1,12 +1,18 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 const Square = ({ value, onClick }) => {
   return (
     <button
-      className="text-6xl cursor-pointer z-10 focus:outline-none"
+      className="z-10 text-6xl cursor-pointer focus:outline-none"
       onClick={onClick}
     >
-      <img src={`./assets/images/${value}.png`} className="p-1" />
+      <motion.img
+        initial={{ scale: 0.5 }}
+        animate={{ scale: 1 }}
+        src={`./assets/images/${value}.png`}
+        className="p-1"
+      />
     </button>
   );
 };
