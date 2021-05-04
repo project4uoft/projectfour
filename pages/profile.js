@@ -9,7 +9,7 @@ function ProfileCard({ user }) {
       <h1>Profile</h1>
 
       <div>
-        <h3>Profile (client rendered)</h3>
+        <h3>Profile</h3>
         <img src={user.picture} alt="user picture" />
         <p>nickname: {user.nickname}</p>
         <p>name: {user.name}</p>
