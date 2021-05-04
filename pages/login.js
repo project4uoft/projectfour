@@ -3,7 +3,7 @@ import styles from '../styles/Login.module.css'
 
 const login = () => {
     return (
-        <div className={styles.container}>
+        <div>
         <Head>
         <title>Login</title>
       </Head>
