@@ -1,4 +1,4 @@
-import Head from 'next/head'
+import Head from "next/head";
 
 export default function Home() {
   return (
@@ -6,6 +6,7 @@ export default function Home() {
       <h1>
         Home Page
       </h1>
+
     </div>
-  )
+  );
 }
