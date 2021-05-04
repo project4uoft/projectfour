@@ -1,9 +1,9 @@
-import gameRoomStyles from '../../../styles/GameRoom.module.css'
+import gameRoomStyles from '../../../../styles/GameRoom.module.css'
 
 
 const GamePlayPanel = () => {
     return(
-        <section className={gameRoomStyles.playerPanel}>
+        <section className={gameRoomStyles.gamePlayContainer}>
             <div>
                 Games can be rendered in here
             </div>

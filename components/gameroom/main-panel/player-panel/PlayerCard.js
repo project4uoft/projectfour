@@ -1,4 +1,4 @@
-import gameRoomStyles from '../../../styles/GameRoom.module.css'
+import gameRoomStyles from '../../../../styles/GameRoom.module.css'
 
 
 const PlayerCard = () => {
