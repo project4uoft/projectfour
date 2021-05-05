@@ -1,15 +1,17 @@
 const Deck = require('./Deck');
 
+
 class BullShitBoard {
 
   constructor(){
     this.discardPile = [];
     this.players = [];
-    this.lastCallValue = ''; 
+    this.currentCall = 0; 
     this.lastCallAmount = '';  
     this.currentPlayer = '';
     this.currentPlayerPos = 0; 
     this.winners = [];
+    this.ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
   }
 
   newGame(players){
@@ -35,8 +37,12 @@ class BullShitBoard {
     }
   }
 
+  getCurrentCall(){
+    return this.ranks[this.currentCall]
+  }
+
   // player calls a number and the card indices in their hands
-  playMove(player, call, cardIndices){
+  playMove(player, cardIndices){
     // add cards to discard pile
     for(let i = 0; i < cardIndices.length; i++){
       this.discardPile.push(player.playerCards[cardIndices[i]]);
@@ -46,10 +52,10 @@ class BullShitBoard {
     //set current player
     this.currentPlayer = player;
     this.lastCallAmount = cardIndices.length;
-    this.lastCallValue = call;
   }
 
   endTurn(){
+    this.currentCall = (this.currentCall + 1)%13;
     if(this.currentPlayer.playerCards.length === 0){
       this.winners.push(this.currentPlayer);
       if(this.winners.length === this.players.length - 1) {
@@ -63,9 +69,7 @@ class BullShitBoard {
   }
 
   checkBluff(player){
-    console.log(this.discardPile.slice(-this.lastCallAmount))
-    console.log(this.lastCallValue)
-    if(this.discardPile.slice(-this.lastCallAmount).every(card => card.rank === this.lastCallValue)){
+    if(this.discardPile.slice(-this.lastCallAmount).every(card => card.rank === this.ranks[this.currentCall])){
       console.log('truth')
       this.discardPile.forEach(card => player.playerCards.push(card))
     }

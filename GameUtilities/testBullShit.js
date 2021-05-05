@@ -50,6 +50,7 @@ const askBluff = () =>{
 
 const startGame = () =>{
   printBoard();
+  console.log(`current card to play: ${game.getCurrentCall()}`)
   const currentPlayer = game.players[game.currentPlayerPos];
   console.log(currentPlayer.getPlayerName());
   currentPlayer.printPlayerCards();
@@ -57,16 +58,11 @@ const startGame = () =>{
   inquirer.prompt([
     {
       type: 'input',
-      message: `Which card rank do you have`,
-      name: 'rank'
-    },
-    {
-      type: 'input',
       message: `Which indices (space in between)`,
       name: 'indices'
     }
   ]).then((response)=>{
-    game.playMove(currentPlayer, response.rank, response.indices.trim().split(' ').map(i => parseInt(i)))
+    game.playMove(currentPlayer,  response.indices.trim().split(' ').map(i => parseInt(i)))
     askBluff();
   })
 }
