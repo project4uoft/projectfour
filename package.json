@@ -1,5 +1,5 @@
 {
-  "name": "auth0",
+  "name": "Project 4",
   "scripts": {
     "dev": "next",
     "build": "next build",
