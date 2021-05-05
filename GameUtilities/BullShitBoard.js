@@ -14,7 +14,7 @@ class BullShitBoard {
 
   newGame(players){
     //set the players in the game
-    this.players = players
+    this.players = players;
 
     //create new deck and shuffle
     let cardDeck = new Deck();
@@ -26,14 +26,15 @@ class BullShitBoard {
     let remainingCards = cardDeck.cards.length % numPlayers;
     let divisibleCards = Math.floor(cardDeck.cards.length / numPlayers);
     let lastIndex = divisibleCards*numPlayers;
-
+    
     for(let i = 0; i < numPlayers; i++){
       this.players[i].playerCards = cardDeck.cards.slice(i*divisibleCards, (i+1)*divisibleCards);
     }
-    for(let j = 0; j < remainingCards.length; j++){
-      this.player[j].playerCards.push(cardDeck.cards[lastIndex+j]);
+    for(let j = 0; j < remainingCards; j++){
+      this.players[j].playerCards.push(cardDeck.cards[lastIndex+j]);
     }
   }
+
   // player calls a number and the card indices in their hands
   playMove(player, call, cardIndices){
     // add cards to discard pile
@@ -50,7 +51,7 @@ class BullShitBoard {
 
   endTurn(){
     if(this.currentPlayer.playerCards.length === 0){
-      this.winners.push(this.lastPlayer);
+      this.winners.push(this.currentPlayer);
       if(this.winners.length === this.players.length - 1) {
         return this.winners
       }
@@ -62,7 +63,8 @@ class BullShitBoard {
   }
 
   checkBluff(player){
-    
+    console.log(this.discardPile.slice(-this.lastCallAmount))
+    console.log(this.lastCallValue)
     if(this.discardPile.slice(-this.lastCallAmount).every(card => card.rank === this.lastCallValue)){
       console.log('truth')
       this.discardPile.forEach(card => player.playerCards.push(card))
