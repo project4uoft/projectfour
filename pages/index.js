@@ -1,7 +1,7 @@
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import { useFetchUser } from '../lib/user'
 
-function Home() {
+function Index() {
   const { user, loading } = useFetchUser()
 
   return (
@@ -27,4 +27,4 @@ function Home() {
   )
 }
 
-export default Home
+export default Index
