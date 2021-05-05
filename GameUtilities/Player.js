@@ -18,6 +18,10 @@ class Player{
   getPlayerName() {
     return this.playerName;
   }
+
+  printPlayerCards() {
+        console.log(this.playerCards.map((card, index) => index + ": " +card.getCard()).join(' '))
+  }
 }
 
 module.exports = Player;
