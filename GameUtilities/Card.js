@@ -4,6 +4,14 @@ const suitBigTwo = {
   'hearts': 2,
   'spades': 3,
 }
+
+const suitIcon = {
+  'diamonds' : '♦',
+  'clubs': '♣',
+  'hearts': '♥',
+  'spades': '♠',
+}
+
 const rankBigTwo = {
   '3' : 0,
   '4': 1,
@@ -41,7 +49,7 @@ class Card {
   }
 
   getCard() {
-    return this.rank +" " + this.suit;
+    return this.rank + '-' + suitIcon[this.suit];
   }
 }
 
