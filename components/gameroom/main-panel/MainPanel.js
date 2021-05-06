@@ -8,7 +8,7 @@ import styles from '../../../styles/GameRoom.module.css'
 
 const MainPanel = () => {
     return (
-    <div className={styles.mainContainer}>
+    <div className="flex flex-col w-full">
         <GamePlayPanel />
         <PlayerPanel />
     </div>
