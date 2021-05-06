@@ -77,7 +77,63 @@ function checkFullHouse(hand){
   return (checkPair(sortedByBigTwoRank.slice(0,2)) && checkTriple(sortedByBigTwoRank.slice(2))) || (checkTriple(sortedByBigTwoRank.slice(0,3)) && checkPair(sortedByBigTwoRank.slice(3)))
 }
 
+function checkFourOfKind(hand){
+  const sortedByBigTwoRank = sortByBigTwoRank(hand);
+  return sortedByBigTwoRank.slice(0,4).every(card => card.value === sortedByBigTwoRank[0].value) || sortedByBigTwoRank.slice(1,5).every(card => card.value === sortedByBigTwoRank[1].value)
+}
 
+function validSimpleMove(lastPlayedHand,hand){
+  let sortedLastPlayedHand = sortByBigTwoRank(lastPlayedHand);
+  let sortedHand = sortByBigTwoRank(hand);
+  return sortedHand[sortedHand.length-1].convertBigTwoRanks() > sortedLastPlayedHand[sortedLastPlayedHand.length-1].convertBigTwoRanks();
+}
+
+function validComplexMove(lastPlayedHand,hand){
+  let sortedLastPlayedHand = sortByBigTwoRank(lastPlayedHand);
+  let sortedHand = sortByBigTwoRank(hand);
+  return sortedHand[2].convertBigTwoRanks() > sortedLastPlayedHand[2].convertBigTwoRanks();
+}
+
+function validStraightMove(lastPlayedHand,hand){
+  let sortedLastPlayedHand = sortByBigTwoRank(lastPlayedHand);
+  if(!checkBigTwoStraight(sortedLastPlayedHand)) sortedLastPlayedHand = sortByValue(lastPlayedHand);
+  let sortedHand = sortByBigTwoRank(hand);
+  if(!checkBigTwoStraight(sortedHand)) sortedHand = sortByValue(hand);
+  return sortedHand[4].convertBigTwoRanks() > sortedLastPlayedHand[4].convertBigTwoRanks();
+}
+
+//order is straight, flush, fullhouse, four of kind, royal flush
+function validFiveCardMove(lastPlayedHand,hand){
+  if(checkStraight(lastPlayedHand) && checkFlush(lastPlayedHand)){
+    if(checkStraight(hand) && checkFlush(hand)){
+      return validSimpleMove(lastPlayedHand, hand)
+    }
+    else return false
+  }
+  else if(checkFourOfKind(lastPlayedHand)){
+    if(checkStraight(hand) && checkFlush(hand)) return true;
+    else if (checkFourOfKind(hand)) return validComplexMove(lastPlayedHand,hand)
+    else return false
+  }
+  else if(checkFullHouse(lastPlayedHand)){
+    if((checkStraight(hand) && checkFlush(hand)) || checkFourOfKind(hand)) return true;
+    else if (checkFullHouse(hand)) return validComplexMove(lastPlayedHand,hand)
+    else return false
+  }
+  else if(checkFlush(lastPlayedHand)){
+    if((checkStraight(hand) && checkFlush(hand)) || checkFourOfKind(hand) || checkFullHouse(hand)) return true;
+    else if (checkFlush(hand)) return validSimpleMove(lastPlayedHand,hand)
+    else return false
+  }
+  else if(checkStraight(lastPlayedHand)){
+    if((checkStraight(hand) && checkFlush(hand)) || checkFourOfKind(hand) || checkFullHouse(hand) || checkFlush(hand)) return true;
+    else if (checkStraight(hand)) return validStraightMove(lastPlayedHand,hand)
+    else return false
+  }
+  else{
+    return false
+  }
+}
 
 //check whether the move is valid
 function checkValidHand(lastPlayedHand, hand){
@@ -90,17 +146,17 @@ function checkValidHand(lastPlayedHand, hand){
   else{
     if(checkSingle(lastPlayedHand)){
       if(checkSingle(hand)){
-        return validSingleMove(lastPlayedHand,hand);
+        return validSimpleMove(lastPlayedHand,hand);
       }
     }
     else if(checkPair(lastPlayedHand)){
       if(checkPair(hand)){
-        return validPairMove(lastPlayedHand,hand);
+        return validSimpleMove(lastPlayedHand,hand);
       }
     }
     else if(checkTriple(lastPlayedHand)){
       if(checkTriple(hand)){
-        return validTripleMove(lastPlayedHand,hand);
+        return validSimpleMove(lastPlayedHand,hand);
       }
     }
     else if(checkFiveCard(lastPlayedHand)){
@@ -122,5 +178,8 @@ module.exports = {
   checkTriple: checkTriple,
   checkStraight: checkStraight,
   checkFlush: checkFlush,
-  checkFullHouse: checkFullHouse
+  checkFullHouse: checkFullHouse,
+  checkFourOfKind: checkFourOfKind,
+  validSimpleMove: validSimpleMove,
+  validFiveCardMove: validFiveCardMove
 };

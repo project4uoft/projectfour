@@ -1,7 +1,6 @@
 const BigTwoBoard = require('./BigTwoBoard');
 const Player = require('./Player');
 const Card = require('./Card');
-const { checkFullHouse } = require('./BigTwoHelper')
 
 const game = new BigTwoBoard();
 const names = ['kirby', 'link','pikachu', 'ness'];
@@ -21,8 +20,3 @@ const printBoard = () =>{
 game.newGame(players);
 
 printBoard()
-
-
-
-const hand = [new Card('diamonds','A', 1),  new Card('hearts','A', 1), new Card('diamonds','2', 2), new Card('clubs','A', 1),  new Card('clubs','2', 2)]
-console.log(checkFullHouse(hand))
