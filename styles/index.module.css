@@ -1,0 +1,53 @@
+.left {
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.h1 {
+    font-weight: 700;
+    font-size: 100px;
+}
+
+.h3 {
+    margin-top: 20px;
+    font-size: 30px;
+}
+
+.outer {
+    display: grid;
+    grid-template: 1fr / 1fr;
+    place-items: center;
+  }
+  .outer > * {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+  }
+  .outer .below {
+    z-index: 1;
+    margin-right: 110px;
+  }
+  .outer .top {
+    z-index: 2;
+  }
+
+  /* MEDIA QUERIES */
+/* Extra small devices (Tested with Iphone X) */
+@media (min-width: 360px) { .outer .top {margin-left: 0px; margin-top: 30px;}}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) { .outer .top {margin-left: 40px; margin-top: 45px;}}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) { .outer .top {margin-left: 70px; margin-top: 50px;}}
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { .outer .top {margin-left: 100px; margin-top: 56px;}}
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { .outer .top {margin-left: 102px; margin-top: 56px;}} 
+
