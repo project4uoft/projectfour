@@ -11,12 +11,15 @@ const printBoard = () =>{
   players.forEach(player => {
     console.log(player.playerName) 
     player.printPlayerCards()});
-  console.log('discard pile', game.discardPile)
+  console.log('discard pile', game.lastPlayedHand)
   console.log('----------')
-  console.log('player to go first:', game.currentPlayer.playerName)
-  console.log(game.currentPlayerPos)
+  console.log('current player:', game.currentPlayer.playerName)
 }
 
 game.newGame(players);
+
+printBoard()
+
+game.playMove(game.currentPlayer,[0,1,2,3,4])
 
 printBoard()
