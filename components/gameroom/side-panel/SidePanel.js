@@ -5,7 +5,7 @@ import Chatroom from './Chatroom'
 
 const SidePanel = () => {
     return(
-        <section className={gameRoomStyles.sidePanel}>
+        <section className="flex flex-col rounded-md border-blue-900 bg-indigo-900 m-4">
             <GameOptions />
             <Chatroom />
         </section>

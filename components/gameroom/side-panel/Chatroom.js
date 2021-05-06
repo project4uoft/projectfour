@@ -12,6 +12,7 @@ const SOCKET_SERVER_URL = "http://localhost:4000";
 
 const Chatroom = () => {
 
+
     const router = useRouter()
     const { roomId } = router.query; // Gets roomId from URL
     // const { messages, sendMessage } = useChat(roomId); // Creates a websocket and manages messaging
