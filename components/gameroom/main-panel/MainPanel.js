@@ -6,10 +6,10 @@ import GamePlayPanel  from './game-play-panel/GamePlayPanel.js'
 import styles from '../../../styles/GameRoom.module.css'
 
 
-const MainPanel = () => {
+const MainPanel = ({currentGame}) => {
     return (
     <div className="flex flex-col w-full">
-        <GamePlayPanel />
+        <GamePlayPanel  currentGame={currentGame}/>
         <PlayerPanel />
     </div>
   )
