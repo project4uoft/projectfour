@@ -2,7 +2,7 @@ import React from "react";
 
 
 const noGameSelected = () => {
-    return(<><p>no game selected</p></>)
+    return(<><h1>no game selected</h1></>)
 }
 
 export default noGameSelected;
