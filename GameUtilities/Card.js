@@ -25,7 +25,7 @@ const rankBigTwo = {
   'Q': 9,
   'K': 10,
   'A': 11,
-  'w': 12,
+  '2': 12,
   
 }
 
@@ -34,6 +34,7 @@ class Card {
     this.suit = suit;
     this.rank = rank;
     this.value = value; 
+    this.bigTwoRank = rankBigTwo[rank];
   }
 
   convertBigTwoRanks(){
