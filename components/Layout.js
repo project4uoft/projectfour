@@ -6,12 +6,10 @@ const Layout = ({children}) => {
     return (
         <>
         <Meta />
-        {/* <Nav /> */}
-        <div className = {styles.container}>
-            <main className = {styles.main}>
+        {/* <Nav /> this is throwing of the height measurements - change placement? */}
+            <main className ="flex flex-col justify-start flex-initial">
                 {children}
             </main>
-        </div>
         </>
     )
 }
