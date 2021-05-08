@@ -1,24 +1,3 @@
-.sidePanel {
-    margin: 1rem;
-    padding: .5rem;
-    border: 1px solid #000000;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color:#293B78;
-  }
-
-.innerSidePanelContainer {
-    margin: 1rem;
-    padding: 1.5rem;
-    text-align: left;
-    border: 1px solid #eaeaea;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column
-  }
-
 .sidePanelButton{
         display:inline-block;
         padding:0.5em 3em;
@@ -50,44 +29,3 @@
     margin:0.4em auto;
      }
     } */
-
-    .mainContainer{
-        display: flex;
-        flex-direction: column;
-    }
-
-
-    .playerPanel{
-        margin: 1rem;
-        padding: .5rem;
-        border: 1px solid #000000;
-        border-radius: 15px;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-    }
-
-    .playerCard {
-        margin: 1rem;
-        padding: 1.5rem;
-        text-align: left;
-        border: 1px solid #eaeaea;
-        border-radius: 15px;
-        display: flex;
-        flex-direction: row
-      }
-
-      .stats{
-          margin: 10px;
-      }
-
-.gamePlayContainer{
-    margin: 1rem;
-    padding: .5rem;
-    height: 400px;
-    border: 1px solid #000000;
-    border-radius: 15px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-}
