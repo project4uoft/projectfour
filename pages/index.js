@@ -19,6 +19,7 @@ export default function Home() {
             <img className={styles.below} src='./assets/images/homepage/cardstack.png' alt='card stack'/>
 
             {/* <img src='./assets/images/homepage/cardtest.png' alt='card stack'/> */}
+            {/* test */}
             
             <div className={styles.top}>
 
