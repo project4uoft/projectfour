@@ -15,6 +15,7 @@ class BigTwoBoard {
 
   newGame(players){
     //set the players in the game
+    this.firstMove = true;
     this.players = players;
 
     //create new deck and shuffle

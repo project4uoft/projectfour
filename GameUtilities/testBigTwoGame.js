@@ -20,6 +20,6 @@ game.newGame(players);
 
 printBoard()
 
-game.playMove(game.currentPlayer,[0,1,2,3,4])
+// game.playMove(game.currentPlayer,[0,1,2,3,4])
 
-printBoard()
+// printBoard()
