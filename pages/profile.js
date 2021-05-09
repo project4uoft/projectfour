@@ -1,31 +1,18 @@
-// This import is only needed when checking authentication status directly from getInitialProps
-// import auth0 from '../lib/auth0'
-// import { useFetchUser } from '../lib/user'
-import Layout from '../components/layout'
+import Head from 'next/head'
+import { useUser,withPageAuthRequired } from '@auth0/nextjs-auth0'
 
-function ProfileCard({ user }) {
-  return (
-    <>
-      <h1>Profile</h1>
 
-      <div>
-        <h3>Profile</h3>
-        <img src={user.picture} alt="user picture" />
-        <p>nickname: {user.nickname}</p>
-        <p>name: {user.name}</p>
-      </div>
-    </>
-  )
-}
 
-function Profile() {
-  const { user, loading } = useFetchUser({ required: true })
-
-  return (
-    <Layout user={user} loading={loading}>
-      {loading ? <>Loading...</> : <ProfileCard user={user} />}
-    </Layout>
-  )
-}
-
-export default Profile
+export default withPageAuthRequired(function Profile() {
+    const { user, error, isLoading } = useUser()
+    if (isLoading) return <div>Loading...</div>
+    if (error) return <div>{error.message}</div>
+    if (user) {
+        return (
+            <div>
+                <img src={user.picture} alt={user.name} />
+                <h2>{user.name}</h2>
+            </div>
+        )
+    }
+});
