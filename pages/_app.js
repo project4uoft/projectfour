@@ -6,13 +6,14 @@ import { UserProvider } from '@auth0/nextjs-auth0';
 
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <UserProvider>
+  const { user } = pageProps;
 
+  return (
+    <UserProvider user={user}>
     <Layout>
       <Component {...pageProps} />
     </Layout>
-    </UserProvider>
+        </UserProvider>
   );
 }
 
