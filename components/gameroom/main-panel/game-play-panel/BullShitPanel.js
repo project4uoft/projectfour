@@ -87,11 +87,13 @@ const BullShitPanel = ({gameBoard, player}) => {
 
             {(gameBoard.players[gameBoard.currentPlayerPos].playerName == player.playerName) ? 
             <div>Seeing if anyone believes you!</div> :
-            <div>
-              Would you like to call {gameBoard.players[gameBoard.currentPlayerPos].playerName} bluff? <br/>
-              <button onClick={handleYes}>Yes</button><br/>
-              <button onClick={handleNo}>No</button>
-            </div>
+            player.playerCards.length === 0 ? null: 
+              <div>
+                Would you like to call {gameBoard.players[gameBoard.currentPlayerPos].playerName} bluff? <br/>
+                <button onClick={handleYes}>Yes</button><br/>
+                <button onClick={handleNo}>No</button>
+              </div>
+            
             }
           </h2>
           

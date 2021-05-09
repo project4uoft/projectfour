@@ -65,8 +65,6 @@ io.on("connection", (socket) => {
     socket.on(NEW_GAME_EVENT, ({roomId, game}) => {
 
       let room = rooms.filter(room=> room.roomId === roomId)[0];
-      console.log(roomId, game)
-      console.log(room)
       if(game === 'bullshit'){
         room['game'] = new BullShitBoard();
         room['game'].newGame(room.players);
@@ -84,8 +82,6 @@ io.on("connection", (socket) => {
       
       let player = rooms[index].game.players.filter(player=> player.playerName === playerName)[0];
       rooms[index].game.playMove(player, cardIndices)
-      console.log('updating')
-      console.log(rooms[index].game)
       io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
         board: rooms[index].game
       })
@@ -98,8 +94,6 @@ io.on("connection", (socket) => {
       
       let player = rooms[index].game.players.filter(player=> player.playerName === playerName)[0];
       let winners = rooms[index].game.checkBluff(player);
-      console.log('updating')
-      console.log(rooms[index].game)
       if(winners){
         io.sockets.in(roomId).emit(END_EVENT, {
           winners: winners
@@ -116,8 +110,6 @@ io.on("connection", (socket) => {
       let room = rooms.filter(room=> room.roomId === roomId)[0];
       let index = rooms.indexOf(room);
       let winners = rooms[index].game.passBluff();
-      console.log('updating')
-      console.log(rooms[index].game)
       if(winners){
         io.sockets.in(roomId).emit(END_EVENT, {
           winners: winners
