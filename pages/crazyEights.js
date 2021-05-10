@@ -1,12 +1,12 @@
 import Head from "next/head";
 import React from "react";
-import CrazyEightsBoard from "../components/crazyEights/crazyEights";
+import CrazyEightsLogic from "../components/crazyEights/crazyEightsLogic";
 
 const game2 = () => {
     return (
         <div>
             {console.log("hey")}
-            <CrazyEightsBoard />
+            <CrazyEightsLogic />
         </div>
     );
 };
