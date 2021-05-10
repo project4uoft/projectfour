@@ -26,7 +26,6 @@ const rankBigTwo = {
   'K': 10,
   'A': 11,
   '2': 12,
-  
 }
 
 class Card {

@@ -24,6 +24,7 @@
     "socket.io": "^4.0.2",
     "socket.io-client": "^4.0.1",
     "tslib": "^2.2.0"
+
   },
   "devDependencies": {
     "autoprefixer": "^10.2.5",
