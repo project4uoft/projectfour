@@ -1,0 +1,69 @@
+.left {
+    text-align: center;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.h1 {
+    font-weight: 700;
+    font-size: 100px;
+}
+
+.h3 {
+    margin-top: 20px;
+    font-size: 30px;
+}
+
+.outer {
+    display: grid;
+    grid-template: 1fr / 1fr;
+    place-items: center;
+  }
+  .outer > * {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+  }
+  .outer .below {
+    z-index: 1;
+    margin-right: 110px;
+  }
+  .outer .top {
+    z-index: 2;
+    background-color: white;
+    border: solid 4px #06064A;
+  }
+
+  .buttons {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 70%;
+  }
+
+  /* MEDIA QUERIES */
+/* Extra small devices (Tested with Iphone X) */
+@media (min-width: 360px) { .outer .top {margin-left: 0px; margin-top: 30px; width:  110px; height:180px; border-radius: 15px;}}
+@media (min-width: 360px) { .buttons {font-size: 7px;}} 
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) { .outer .top {margin-left: 40px; margin-top: 45px; width: 160px; height:250px; border-radius: 15px;}}
+@media (min-width: 576px) { .buttons {font-size: 10px;}} 
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) { .outer .top {margin-left: 70px; margin-top: 50px; width: 200px; height:300px; border-radius: 25px;}}
+@media (min-width: 768px) { .buttons {font-size: 15px;}} 
+
+/* // Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { .outer .top {margin-left: 100px; margin-top: 56px; width: 254px; height: 385px; border-radius: 25px;}}
+@media (min-width: 992px) { .buttons {font-size: 20px;}} 
+
+/* // Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { .outer .top {margin-left: 102px; margin-top: 56px; width: 254px; height: 385px; border-radius: 25px;}} 
+@media (min-width: 1200px) { .buttons {font-size: 20px;}} 
+
