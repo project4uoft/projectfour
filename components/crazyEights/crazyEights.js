@@ -23,7 +23,7 @@ const Deck = require('./crazyEightsDeck');
 const CrazyEightsBoard = () => {
 
     //Setting up default states
-    const [discardPile, setDiscardPile] = useState([]);
+    // const [discardPile, setDiscardPile] = useState([]);
     const [players, setPlayers] = useState([
         {
             position: 1,
@@ -40,18 +40,22 @@ const CrazyEightsBoard = () => {
         //     hand: []
         // } 
     ])
-    // const [currentPlayer, setCurrentPlayer] = useState('')
-    const [currentPlayerPos, setCurrentPlayerPos] = useState(0)
 
-    //Create new game, inserting the number of players there are    
+    const dealerPosition = 0;
+    let currentSuit = ''
+    const topCard = {}
     let numPlayers = players.length;
+    let currentPlayerIndex = 0
+    let discardPile = []
 
     //Creates new shuffled deck
     let cardDeck = new Deck()
     cardDeck.createDeck()
     cardDeck.shuffleDeck()
-    console.log(cardDeck.cards)
-
+    console.log(cardDeck)
+    
+      
+    //Create new game, inserting the number of players there are    
     const dealHands = () => {
 
         //Deal the hands
@@ -67,7 +71,9 @@ const CrazyEightsBoard = () => {
                     const selectedCard = cardDeck.cards.splice(Math.floor(Math.random() * cardDeck.length), 1)
                     players[i].hand.push(selectedCard)
                 }
-                console.log(players[i].hand)
+                //Removing the nested array that occured when pushing card objts into the players hand
+                players[i].hand = Array.prototype.concat.apply([], players[i].hand);
+                console.log(players[i].hand.flat())
             }
         } else if (numPlayers > 2 && numPlayers < 7) {
             //Each player gets 5 cards each
@@ -77,25 +83,71 @@ const CrazyEightsBoard = () => {
                     const selectedCard = cardDeck.cards.splice(Math.floor(Math.random() * cardDeck.length), 1)
                     players[i].hand.push(selectedCard)
                 }
+                //Removing the nested array that occured when pushing card objts into the players hand
+                players[i].hand = Array.prototype.concat.apply([], players[i].hand);
+                console.log(players[i].hand.flat())
             }
         } else if (numPlayers > 7) {
             console.log("Too many people to play this game!!")
         }
         let remainingCards = cardDeck.cards
-        console.log(remainingCards)
     
         let topCard = remainingCards[0]
-        console.log(topCard)
+        console.log("top card:",  topCard)
+
+        discardPile.push(topCard)
+        console.log("discard pile:", discardPile)
+
+        currentSuit = topCard.suit
+        console.log("first currentSuit:", currentSuit)
 
         let dealer = players[Math.floor(Math.random() * numPlayers)]
         let dealerPosition = players.indexOf(dealer)
-        console.log("dealer:", dealer)
-        console.log("position of dealer in array:", dealerPosition)
+        // console.log("dealer:", dealer)
+        // console.log("index of dealer:", dealerPosition)
+        let currentPlayerIndex = dealerPosition + 1 
+        // console.log("current player index:", currentPlayerIndex)
+
         
     }
     dealHands()
+    // console.log(players[currentPlayerIndex])
+    let currentPlayer = players[currentPlayerIndex]
+
     
-    //LEFT OFF - the terminal and console are not showing the same logs! 
+
+// let testPlayerCard = {suit: 'hearts', rank: 'K', value: 10 }
+// card must match number, or suit, or AN EIGHT (declares new suit) or draw from the pile and continue their turn. 
+    const makeMove = (currentPlayer, playedCard) => {
+        // console.log("current player:", currentPlayer)
+        console.log("playedCard:", playedCard)
+
+        // If the players card suit matches the last card added to the pile 
+        if(playedCard.suit === discardPile[discardPile.length - 1].suit){
+            console.log("the card suit matches, card accepted")
+            const playedCardIndex = currentPlayer.hand.indexOf(playedCard[0])
+            console.log("played Card index:", playedCardIndex)
+            discardPile.push(currentPlayer.hand.splice(playedCardIndex, 1))
+            discardPile = Array.prototype.concat.apply([], discardPile);
+
+        } 
+        discardPile.concat.apply([], discardPile);
+
+        if(playedCard.rank === discardPile[discardPile.length -1].rank){
+            console.log("the card number matches, card accepted, changing suit")
+            // currentSuit = playedCard.suit
+            // console.log("current suit:", currentSuit)
+            //Take the card out of their hand and insert into discard pile
+            // const playedCardIndex = player.hand.indexOf(playedCard)
+            // console.log(playedCardIndex)
+            // discardPile.push(player.hand.splice(playedCard))
+        }
+    }
+    makeMove(currentPlayer, currentPlayer.hand[0])
+    console.log("current player:", currentPlayer)
+
+    console.log("discard pile:", discardPile)
+    // playedCard = {suit: 'hearts', rank: 'K', value: 10 }
 
 
     return (<></>)
