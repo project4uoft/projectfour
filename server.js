@@ -11,7 +11,7 @@ const next = require("next")
 const dev = process.env.NODE_ENV !== 'production'
 const nextApp = next({ dev })
 const nextHandler = nextApp.getRequestHandler()
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 
 io.on("connection", (socket) => {

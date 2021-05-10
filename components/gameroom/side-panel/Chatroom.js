@@ -1,4 +1,3 @@
-import gameRoomStyles from '../../../styles/GameRoom.module.css'
 import chatRoomStyles from '../../../styles/Chatroom.module.css'
 
 
@@ -7,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
 
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage"; // Name of the event
-const SOCKET_SERVER_URL = "http://localhost:4000";
+const SOCKET_SERVER_URL = "http://localhost:3000";
 
 
 const Chatroom = () => {
@@ -19,19 +18,31 @@ const Chatroom = () => {
     const [messages, setMessages] = useState([]); // Sent and received messages
     const socketRef = useRef();
 
+    // Create a referance to point to Chat Container
+    const chatContainerRef = useRef();
+
     const [newMessage, setNewMessage] = useState(""); // Message to be sent
 
     const handleNewMessageChange = (event) => {
         setNewMessage(event.target.value);
     };
 
-    const handleSendMessage = () => {
+    const handleSendMessage = (e) => {
+        e.preventDefault();
         socketRef.current.emit(NEW_CHAT_MESSAGE_EVENT, {
             body: newMessage,
             senderId: socketRef.current.id,
         });
         setNewMessage("");
     };
+
+    const scrollToMyRef = () => {
+        const scroll =
+          chatContainerRef.current.scrollHeight -
+          chatContainerRef.current.clientHeight ;
+
+        chatContainerRef.current.scrollTo(0, chatContainerRef.current.scrollHeight);
+      };
 
     useEffect(() => {
 
@@ -47,6 +58,9 @@ const Chatroom = () => {
                 ownedByCurrentUser: message.senderId === socketRef.current.id,  // check if message was sent by current user
             };
             setMessages((messages) => [...messages, incomingMessage]);
+            
+            // Scroll to lastest message.
+            scrollToMyRef();
         });
 
         // Destroys the socket reference
@@ -56,9 +70,8 @@ const Chatroom = () => {
         };
     }, [roomId]);
     return (
-        // <section className={gameRoomStyles.innerSidePanelContainer}></section>
-        <section>
-            <div className={chatRoomStyles.messagesContainer}>
+        <section className={chatRoomStyles.chatSection}>
+            <div ref={chatContainerRef} className={chatRoomStyles.messagesContainer}>
                 <ul className={chatRoomStyles.messagesList}>
                     {messages.map((message, i) => (
                         <li
@@ -69,17 +82,23 @@ const Chatroom = () => {
                             {message.body}
                         </li>
                     ))}
+
                 </ul>
             </div>
-            <textarea
-                value={newMessage}
-                onChange={handleNewMessageChange}
-                placeholder="Type your message here..."
-                className={chatRoomStyles.newMessagesTextArea}                
-            />
-            <button onClick={handleSendMessage} className={chatRoomStyles.sendMessageButton}>
-                SEND
-            </button>
+
+            <form action="" onSubmit={(e) => handleSendMessage(e)}>
+                <input
+                    type="text"
+                    value={newMessage}
+                    onChange={handleNewMessageChange}
+                    placeholder="Type your message here..."
+                    className={chatRoomStyles.newMessagesTextArea}
+                
+                />
+                <button onSubmit={(e) => handleSendMessage(e)} className={chatRoomStyles.sendMessageButton}>
+                    SEND
+                </button>
+            </form>
         </section>
     )
 }

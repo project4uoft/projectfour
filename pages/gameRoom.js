@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import SidePanel from '../components/gameroom/side-panel/SidePanel'
 import MainPanel  from '../components/gameroom/main-panel/MainPanel.js'
-import Nav from '../components/Nav'
+// import Nav from '../components/Nav'
 
 //CSS import 
 import styles from '../styles/Layout.module.css'
