@@ -1,15 +1,31 @@
-import gameRoomStyles from '../../../../styles/GameRoom.module.css'
+import gameRoomStyles from "../../../../styles/GameRoom.module.css";
 
-import PlayerCard from './PlayerCard'
+import PlayerCard from "./PlayerCard";
 
-const PlayerPanel = () => {
-    return(
-        <section className="flex flex-row rounded-md border-2 border-black justify-around h-1/4 m-4 p-2">
-            <PlayerCard />
-            <PlayerCard />
-            <PlayerCard />
-        </section>
-    )
-}
+const PlayerPanel = ({ players, roomId, game }) => {
+  console.log("plkayers", players, roomId, game);
+  return (
+    <section className="flex flex-row justify-around p-2 m-4 border-2 border-black rounded-md h-1/5">
+      <div className="self-auto p-2 m-2 text-center border border-gray-300 rounded w-52">
+        <p>
+          <strong className="text-gray-600">Room:</strong>
+          <br />
+          {roomId}
+        </p>
+        <p>
+          <strong className="text-gray-600">Game:</strong> {game}
+        </p>
+        <ul>
+          {players.map((player) => {
+            return <li>{player.playerName}</li>;
+          })}
+        </ul>
+      </div>
+      {/* <PlayerCard />
+      <PlayerCard />
+      <PlayerCard /> */}
+    </section>
+  );
+};
 
 export default PlayerPanel;

@@ -1,18 +1,24 @@
-import React from 'react';
+import React from "react";
+import { motion } from "framer-motion";
+
 const suitIcon = {
-  'diamonds' : '♦',
-  'clubs': '♣',
-  'hearts': '♥',
-  'spades': '♠',
-}
-const Card = ({suit, rank}) =>{
-  
-  
-  return(
-    <div style={{border:'1px solid black', padding: '5px', margin:'2px', color: suit === 'diamonds' || suit=== 'heart' ? 'red' : 'black'}}>
-      {rank}{suitIcon[suit]}
-    </div>
-  )
-}
+  diamonds: "♦",
+  clubs: "♣",
+  hearts: "♥",
+  spades: "♠",
+};
+const Card = ({ suit, rank }) => {
+  return (
+    <motion.div
+      whileHover={{ scale: 1.2 }}
+      className={`text-xl w-10 shadow-md h-16 p-0.5 mr-3 mb-4 text-${
+        suit === "diamonds" || suit === "hearts" ? "red" : "black"
+      }-600 border border-gray-400 rounded`}
+    >
+      {rank}
+      {suitIcon[suit]}
+    </motion.div>
+  );
+};
 
 export default Card;

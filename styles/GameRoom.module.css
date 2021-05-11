@@ -1,29 +1,29 @@
-.sidePanelButton{
-        display:inline-block;
-        padding:0.5em 3em;
-        border:0.16em solid #2674da;
-        margin:0 0.3em 0.3em 0;
-        box-sizing: border-box;
-        text-decoration:none;
-        text-transform:uppercase;
-        font-family:'Roboto',sans-serif;
-        font-weight:400;
-        color:#070505;
-        text-align:center;
-        transition: all 0.15s;
-        cursor: pointer
-  }
+.sidePanelButton {
+  display: inline-block;
+  padding: 0.5em 3em;
+  border: 0.16em solid #2674da;
+  margin: 0 0.3em 0.3em 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  color: #2674da;
+  text-align: center;
+  transition: all 0.15s;
+  cursor: pointer;
+}
 
-.sidePanelButton:hover{
-    color:#ffffff;
-    border-color:rgb(126, 147, 241);
-    }
-.sidePanelButton:active{
-    color:#BBBBBB;
-    border-color:#6ee9df;
-    }
+.sidePanelButton:hover {
+  color: #ffffff;
+  border-color: rgb(126, 147, 241);
+}
+.sidePanelButton:active {
+  color: #bbbbbb;
+  border-color: #6ee9df;
+}
 /* Resizing buttons for different screens - don't delete */
-    /* @media all and (max-width:30em){
+/* @media all and (max-width:30em){
     .gameRoomButton{
     display:block;
     margin:0.4em auto;

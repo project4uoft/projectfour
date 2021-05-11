@@ -1,105 +1,107 @@
 .messagesContainer {
-    background-color: white;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+  background-color: white;
+  padding: 15px;
+  margin: 0 20px;
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 
 .messagesList {
-    /* box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); */
-    display: flex;
-    flex-direction: column;
+  /* box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); */
+  display: flex;
+  flex-direction: column;
 }
 
 .myMessage {
-    max-width: 255px;
-    word-wrap: break-word;
-    margin-bottom: 12px;
-    line-height: 24px;
-    position: relative;
-    padding: 10px 20px;
-    border-radius: 25px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    color: white;
-    background: #0B93F6;
-    align-self: flex-end;
+  max-width: 255px;
+  word-wrap: break-word;
+  margin-bottom: 12px;
+  margin-right: 5px;
+  line-height: 20px;
+  position: relative;
+  padding: 6px 15px;
+  border-radius: 15px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  color: white;
+  background: #0b93f6;
+  align-self: flex-end;
 }
 
 .myMessage::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    height: 25px;
-    right: -7px;
-    width: 20px;
-    background-color: #0B93F6;
-    border-bottom-left-radius: 16px 14px;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 25px;
+  right: -7px;
+  width: 20px;
+  background-color: #0b93f6;
+  border-bottom-left-radius: 16px 14px;
 }
 
 .myMessage::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    height: 25px;
-    right: -10px;
-    width: 10px;
-    background-color: white;
-    border-bottom-left-radius: 10px;
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 25px;
+  right: -10px;
+  width: 10px;
+  background-color: white;
+  border-bottom-left-radius: 10px;
 }
 
 .receivedMessage {
-    max-width: 255px;
-    word-wrap: break-word;
-    margin-bottom: 12px;
-    line-height: 24px;
-    position: relative;
-      padding: 10px 20px;
-    border-radius: 25px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    background: #E5E5EA;
-	color: black;
+  max-width: 255px;
+  word-wrap: break-word;
+  margin-bottom: 12px;
+  line-height: 20px;
+  position: relative;
+  padding: 6px 15px;
+  margin-left: 5px;
+  border-radius: 15px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  background: #e5e5ea;
+  color: black;
   align-self: flex-start;
-    /* background-color: rgb(75, 214, 105); */
-  
+  /* background-color: rgb(75, 214, 105); */
 }
 
 .receivedMessage::before {
-    content: "";
-		position: absolute;
-    bottom: 0;
-    height: 25px;
-    left: -7px;
-    width: 20px;
-    background-color: #E5E5EA;
-		border-bottom-right-radius: 16px 14px;
-       
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 25px;
+  left: -7px;
+  width: 20px;
+  background-color: #e5e5ea;
+  border-bottom-right-radius: 16px 14px;
 }
 
 .receivedMessage::after {
-    content: "";
-		position: absolute;
-    bottom: 0;
-    height: 25px;
-    left: -10px;
-    width: 10px;
-    background-color: white;
-		border-bottom-right-radius: 10px;
-        
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 25px;
+  left: -10px;
+  width: 10px;
+  background-color: white;
+  border-bottom-right-radius: 10px;
 }
 
 .newMessagesTextArea {
-    border-radius: 10px;
-    background-color: white;
-    color: black;
-    margin-top: 10px;
-    padding: 5px;
-    width: 100%;
+  border-radius: 10px;
+  background-color: white;
+  color: black;
+  margin-top: 10px;
+  padding: 5px;
+  width: 100%;
 }
 
 .sendMessageButton {
-    border-radius: 10px;
-    width: 100%;
-    background-color: teal;
-    color: white;
-    margin-top: 15px;
+  border-radius: 10px;
+  width: 100%;
+  background-color: teal;
+  color: white;
+  margin-top: 15px;
 }
