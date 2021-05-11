@@ -16,10 +16,11 @@
   max-width: 255px;
   word-wrap: break-word;
   margin-bottom: 12px;
-  line-height: 24px;
+  margin-right: 5px;
+  line-height: 20px;
   position: relative;
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 6px 15px;
+  border-radius: 15px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   color: white;
@@ -53,10 +54,11 @@
   max-width: 255px;
   word-wrap: break-word;
   margin-bottom: 12px;
-  line-height: 24px;
+  line-height: 20px;
   position: relative;
-  padding: 10px 20px;
-  border-radius: 25px;
+  padding: 6px 15px;
+  margin-left: 5px;
+  border-radius: 15px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   background: #e5e5ea;

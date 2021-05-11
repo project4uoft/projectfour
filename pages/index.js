@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     if (user) {
       const roomId = uuid();
-      router.push(`/gameroom?user=${user.nickname}&roomid=${roomId}`);
+      router.push(`/rooms/${roomId}/${user.nickname}`);
     }
   }, [user, isLoading]);
 
