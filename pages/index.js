@@ -1,10 +1,22 @@
 import Head from "next/head";
-import styles from '../styles/index.module.css';
-import { useUser } from '@auth0/nextjs-auth0';
-
+import styles from "../styles/index.module.css";
+import { useUser } from "@auth0/nextjs-auth0";
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { v4 as uuid } from "uuid";
 
 export default function Home() {
   const { user, error, isLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      const roomId = uuid();
+      router.push(`/rooms/${roomId}/${user.nickname}`);
+    }
+  }, [user, isLoading]);
+
   return (
     <div>
       <Head>
@@ -17,13 +29,23 @@ export default function Home() {
           {/* Column1 */}
           <div className={styles.left}>
             <h1 className={styles.h1}>Party House</h1>
-            <img className={styles.logo} src='./assets/images/homepage/Logo1.png' alt='Logo' />
-            <h3 className={styles.h3}>Play games with friends from your home</h3>
+            <img
+              className={styles.logo}
+              src="./assets/images/homepage/Logo1.png"
+              alt="Logo"
+            />
+            <h3 className={styles.h3}>
+              Play games with friends from your home
+            </h3>
           </div>
 
           {/* Column2 */}
           <div className={styles.outer}>
-            <img className={styles.below} src='./assets/images/homepage/cardstack.png' alt='card stack' />
+            <img
+              className={styles.below}
+              src="./assets/images/homepage/cardstack.png"
+              alt="card stack"
+            />
 
             {/* <img src='./assets/images/homepage/cardtest.png' alt='card stack'/> */}
 
@@ -42,33 +64,53 @@ export default function Home() {
                 <div className="grid grid-cols-1 gap-10">
                   {!user ? (
                     <>
-                      <form action="/api/auth/login" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-purple-300 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" value="Sign Up or Login" />
-                      </form>
-                      <form action="/api/auth/login" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-purple-800 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded" value="Guest" />
-                      </form>
-                    </>) : (
-                    <>
-
-                      <form action="/api/auth/logout" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-gray-900 hover:bg-blue-900 text-white font-bold" value="Log Out" />
-                      </form>
-                      <form action="/profile" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-gray-900 hover:bg-blue-900 text-white font-bold" value="Profile" />
-                      </form>
+                      {/* <form action="/api/auth/login" className="px-4 py-2 rounded ">
+                        <input type="submit" className="font-bold text-white bg-gray-900 hover:bg-blue-900" value="Sign Up or Login" />
+                      </form> */}
+                      <Link href="/api/auth/login">
+                        <button className="flex justify-center rounded hover:bg-grey">
+                          <img
+                            src=".././assets/images/homepage/SignupButton.png"
+                            alt="login"
+                          />
+                        </button>
+                      </Link>
+                      <Link href="/api/auth/login">
+                        <button className="flex justify-center rounded hover:bg-grey">
+                          <img
+                            src=".././assets/images/homepage/LoginButton.png"
+                            alt="login"
+                          />
+                        </button>
+                      </Link>
+                      <Link href="/api/auth/login">
+                        <button className="flex justify-center rounded hover:bg-grey">
+                          <img
+                            src=".././assets/images/homepage/GuestButton.png"
+                            alt="Guest"
+                          />
+                        </button>
+                      </Link>
                     </>
-                  )}
+                  ) : (
+                    <>
+                      <Link href="/api/auth/logout">
+                        <button className="flex justify-center rounded hover:bg-grey">
+                          <img
+                            src=".././assets/images/homepage/GuestButton.png"
+                            alt="Guest"
+                          />
+                        </button>
+                      </Link>
+                    </>
+                    )}
+                  </div>
                 </div>
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
-    </div >
-  </div>
-
+    </div>
   );
 }
