@@ -1,16 +1,8 @@
-//how many players? 2-7
-//how many cards each player gets - 5 each (7 in two player)
-//rest of deck facedown as stock pile of cards
-//top card turned up on the side 
-//pick a dealer 
-//left of the dealer starts 
-// card must match number, or suit, or AN EIGHT (declares new suit) or draw from the pile and continue their turn. 
-//one card at a time 
-//once the stock pile is done - all cards played are shuffled to form a new stock 
-//game ends when one player has no cards left 
-
 import React, { useState } from 'react'
 const Deck = require('./crazyEightsDeck');
+import Card from './components/CardComponent'
+import DiscardPile from './components/DiscardPile'
+
 
 const CrazyEightsLogic = () => {
 
@@ -27,12 +19,15 @@ const CrazyEightsLogic = () => {
             score: 0
         }
     ])
-
+    const [test, setTest] = useState()
     let currentSuit = ''
     let numPlayers = players.length;
     let currentPlayerIndex = 0
     let discardPile = []
-
+    //this will change depending on number of logged in users - dynamic??
+    let loggedInUersIndex = 1
+    let loggedInUersPosition = players[loggedInUersIndex]
+    console.log("loggedInUersPosition:", loggedInUersPosition)
 
     //Creates new shuffled deck
     let cardDeck = new Deck()
@@ -76,7 +71,7 @@ const CrazyEightsLogic = () => {
 
         //Let the stockpile be the remaining cards after hands are dealt
         let stockPile = cardDeck.cards
-        console.log("stockpile:", stockPile)
+        // console.log("stockpile:", stockPile)
 
         //Pick the top card to be the first starter card
         let topCard = stockPile[0]
@@ -100,11 +95,28 @@ const CrazyEightsLogic = () => {
 
 
     }
-    dealHands()
 
     //Set the current player
     let currentPlayer = players[currentPlayerIndex]
 
+    const [playedCard, setPlayedCard] = useState()
+
+    //Set the card chosen by the user
+    const selectedCard = (suit, rank, value) => {
+        let chosenCard = {
+            "suit": suit,
+            "rank": rank,
+            "value": value
+        }
+        setPlayedCard(chosenCard)
+        // makeMove()
+        console.log("playedCard:", playedCard)
+        console.log("playedCard:", playedCard.rank)
+    }
+
+    // LEFT OFF RANK IS NOW BEING READ BUT THE CARDS ARE BEING DEALT ON EVERY CLICK 
+
+    // console.log("playedCard:", playedCard)
     // card must match number, or suit, or AN EIGHT, or draw from the pile and continue their turn. 
     const makeMove = (currentPlayer, playedCard) => {
         console.log("playedCard:", playedCard)
@@ -136,19 +148,19 @@ const CrazyEightsLogic = () => {
             //Flatten the discard pile, so there are not nested arrays
             discardPile = Array.prototype.concat.apply([], discardPile);
         }
-    }
-
-    if ("") {
-        if (stockpile.length > 0) {
-            currentPlayer.hand.push(stockpile.length - 1)
-        } else {
-            resetStockPile()
-            currentPlayer.hand.push(stockpile.length - 1)
-            // offer option of mave move or pass
-            // makeMove()
-            // endMove()
+        if ("") {
+            if (stockpile.length > 0) {
+                currentPlayer.hand.push(stockpile.length - 1)
+            } else {
+                resetStockPile()
+                currentPlayer.hand.push(stockpile.length - 1)
+                // offer option of mave move or pass
+                // makeMove()
+                // endMove()
+            }
         }
     }
+
 
 
     //End turn and move to the next player
@@ -165,14 +177,14 @@ const CrazyEightsLogic = () => {
     }
 
 
-
+    //Reshuffle the pile of cards
     const resetStockPile = () => {
         discardPile.shuffleDeck()
         stockPile = disCardPile
     }
 
 
-
+    //Instigate the end of the game 
     const endOfRound = () => {
         let scoreSum = 0
         // If the current player has no cards left
@@ -195,54 +207,65 @@ const CrazyEightsLogic = () => {
 
 
         // check to see if there's a winner
-        switch (players.length) {
-            case 2:
-                if (currentPlayer.score >= 100) {
-                    console.log(`Game over ${currentPlayer} wins!`)
-                } else {
-                    break
-                };
-            case 3:
-                if (currentPlayer.score >= 150) {
-                    console.log(`Game over ${currentPlayer} wins!`)
-                } else {
-                    break
-                };
-            case 4:
-                if (currentPlayer.score >= 200) {
-                    console.log(`Game over ${currentPlayer} wins!`)
-                } else {
-                    break
-                };
-            case 5:
-                if (currentPlayer.score >= 250) {
-                    console.log(`Game over ${currentPlayer} wins!`)
-                } else {
-                    break
-                };
-            case 6:
-                if (currentPlayer.score >= 300) {
-                    console.log(`Game over ${currentPlayer} wins!`)
-                } else {
-                    break
-                };
-            case 7:
-                if (currentPlayer.score >= 350) {
-                    console.log(`Game over ${currentPlayer} wins!`)
-                } else {
-                    break
+        const checkWinner = () => {
+            switch (players.length) {
+                case 2:
+                    if (currentPlayer.score >= 100) {
+                        console.log(`Game over ${currentPlayer} wins!`)
+                    } else {
+                        break
+                    };
+                case 3:
+                    if (currentPlayer.score >= 150) {
+                        console.log(`Game over ${currentPlayer} wins!`)
+                    } else {
+                        break
+                    };
+                case 4:
+                    if (currentPlayer.score >= 200) {
+                        console.log(`Game over ${currentPlayer} wins!`)
+                    } else {
+                        break
+                    };
+                case 5:
+                    if (currentPlayer.score >= 250) {
+                        console.log(`Game over ${currentPlayer} wins!`)
+                    } else {
+                        break
+                    };
+                case 6:
+                    if (currentPlayer.score >= 300) {
+                        console.log(`Game over ${currentPlayer} wins!`)
+                    } else {
+                        break
+                    };
+                case 7:
+                    if (currentPlayer.score >= 350) {
+                        console.log(`Game over ${currentPlayer} wins!`)
+                    } else {
+                        break
 
-                }
+                    }
+            }
         }
     }
-    endOfRound()
+    //Deal the hands
+    //First player picks a card
 
-
-
-
-
-
-    return (<></>)
+    return (<>
+        <div className="container">
+            <button onClick={dealHands()}>Start Game</button>
+            <p>testing</p>
+            {loggedInUersPosition.hand.map(card => {
+                return (
+                    <Card rank={card.rank} suit={card.suit} selectedCard={selectedCard} value={card.value} />)
+            })}
+            <p>Discard Pile:</p>
+            <DiscardPile discardPile={discardPile} />
+            <p>Game Moves:</p>
+            <button></button>
+        </div>
+    </>)
 }
 
 module.exports = CrazyEightsLogic;
