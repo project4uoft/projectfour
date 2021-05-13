@@ -11,11 +11,7 @@ function DiscardPile({discardPile}) {
     return(
 
         <div className="cardContainer" style={{border:"1px solid black", width:"100px", justifyContent:"center"}}>
-           {/* {discardPile.map(card => {
-              return <CardComponent key={card.rank + card.suit} rank={card.rank} suit={card.suit} />
-           })} */}
-           <CardComponent rank={discardPile[discardPile.length - 1].rank} suit={discardPile[discardPile.length - 1].suit} />
-
+           {discardPile && <CardComponent rank={discardPile[discardPile.length - 1].rank} suit={discardPile[discardPile.length - 1].suit} />}
         </div>
     )
 }
