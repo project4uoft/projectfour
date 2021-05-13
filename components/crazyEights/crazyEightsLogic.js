@@ -19,15 +19,16 @@ const CrazyEightsLogic = () => {
             score: 0
         }
     ])
-    const [test, setTest] = useState()
+    const [readyRender, setReadyRender] = useState(false)
+    const [discardPile, setDiscardPile] = useState([])
+    const [stockPile, setStockPile] = useState([])
     let currentSuit = ''
     let numPlayers = players.length;
     let currentPlayerIndex = 0
-    let discardPile = []
+    // let stockPile = []
     //this will change depending on number of logged in users - dynamic??
-    let loggedInUersIndex = 1
-    let loggedInUersPosition = players[loggedInUersIndex]
-    console.log("loggedInUersPosition:", loggedInUersPosition)
+    let loggedInUsersIndex = 1
+    let loggedInUsersPosition = players[loggedInUsersIndex]
 
     //Creates new shuffled deck
     let cardDeck = new Deck()
@@ -36,7 +37,7 @@ const CrazyEightsLogic = () => {
 
 
 
-    const dealHands = () => {
+    function dealHands() {
         //Deal the hands depending on the number of players
         if (numPlayers === 1) {
             console.log("You need friends for this one")
@@ -49,8 +50,11 @@ const CrazyEightsLogic = () => {
                     const selectedCard = cardDeck.cards.splice(Math.floor(Math.random() * cardDeck.length), 1)
                     players[i].hand.push(selectedCard)
                 }
+                console.log("loggedInUsersPosition:", loggedInUsersPosition)
                 //Removing the nested array that occured when pushing card obj's into the players hand
                 players[i].hand = Array.prototype.concat.apply([], players[i].hand);
+                console.log("players hand:", players[i].hand)
+                console.log("players", players)
             }
 
         } else if (numPlayers > 2 && numPlayers < 7) {
@@ -68,38 +72,48 @@ const CrazyEightsLogic = () => {
         } else if (numPlayers > 7) {
             console.log("Too many people to play this game!!")
         }
-
-        //Let the stockpile be the remaining cards after hands are dealt
-        let stockPile = cardDeck.cards
-        // console.log("stockpile:", stockPile)
-
-        //Pick the top card to be the first starter card
-        let topCard = stockPile[0]
-        console.log("top card:", topCard)
-
-        //Move the top ard from the stockpile to the discard pile
-        discardPile.push(topCard)
-        console.log("discard pile:", discardPile)
-
-        //Set the starting suit to that of the top card
-        currentSuit = topCard.suit
-        console.log("first currentSuit:", currentSuit)
-
-        //Pick a random dealer
-        let dealer = players[Math.floor(Math.random() * numPlayers)]
-        let dealerPosition = players.indexOf(dealer)
-
-        //First person to paly is left of the dealer
-        let currentPlayerIndex = dealerPosition + 1
-        console.log("current player index:", currentPlayerIndex)
-
+        // setStock()
+        //It's a nested array but can't figure out how to change it :( and make it work 
+        setStockPile([...stockPile, cardDeck.cards])
 
     }
 
+
+    function setTable() {
+
+        console.log("stock in set table:", stockPile)
+
+        //Pick the top card to be the first starter card
+        let topCard = stockPile[0][0]
+        console.log("top card:", topCard)
+
+        // //Move the top ard from the stockpile to the discard pile
+        setDiscardPile([...discardPile, topCard])
+        console.log("discard pile:", discardPile)
+
+        // //Set the starting suit to that of the top card
+        currentSuit = topCard.suit
+        console.log("first currentSuit:", currentSuit)
+
+        // //Pick a random dealer
+        let dealer = players[Math.floor(Math.random() * numPlayers)]
+        let dealerPosition = players.indexOf(dealer)
+
+        // //First person to paly is left of the dealer
+        let currentPlayerIndex = dealerPosition + 1
+        console.log("current player index:", currentPlayerIndex)
+
+        setReadyRender(true)
+    }
+
+
+
     //Set the current player
     let currentPlayer = players[currentPlayerIndex]
+    console.log("current player:", currentPlayer)
 
-    const [playedCard, setPlayedCard] = useState()
+    const [playedCard, setPlayedCard] = useState({})
+    console.log("playedCard:", playedCard)
 
     //Set the card chosen by the user
     const selectedCard = (suit, rank, value) => {
@@ -109,33 +123,67 @@ const CrazyEightsLogic = () => {
             "value": value
         }
         setPlayedCard(chosenCard)
-        // makeMove()
-        console.log("playedCard:", playedCard)
-        console.log("playedCard:", playedCard.rank)
+        makeMove(currentPlayer, chosenCard)
     }
 
-    // LEFT OFF RANK IS NOW BEING READ BUT THE CARDS ARE BEING DEALT ON EVERY CLICK 
 
-    // console.log("playedCard:", playedCard)
     // card must match number, or suit, or AN EIGHT, or draw from the pile and continue their turn. 
     const makeMove = (currentPlayer, playedCard) => {
-        console.log("playedCard:", playedCard)
+
+        console.log("moveplayedCard:", playedCard)
+        console.log("moveplayedCard suit:", playedCard.suit)
+        console.log("moveplayedCard rank:", playedCard.rank)
+        console.log("makemove discard:", discardPile[discardPile.length - 1])
+        console.log("makemove discard suit:", discardPile[discardPile.length - 1].suit)
+        console.log("makemove discard rank:", discardPile[discardPile.length - 1].rank)
+
+
+        if (playedCard.rank != discardPile[discardPile.length - 1].rank && playedCard.suit != discardPile[discardPile.length - 1].suit) {
+            console.log("can't play this card")
+            let input = prompt()
+            prompt("Would you like to try another card in your hand?")
+            if (input == "yes") {
+                return;
+            } else {
+
+                if (stockPile.length > 0) {
+                    currentPlayer.hand.push(stockPile[0].length - 1)
+                    console.log(currentPlayer.hand)
+                } else {
+                    console.log("we need to shuffle the deck")
+                    // resetStockPile()
+                    // currentPlayer.hand.push(stockpile.length - 1)
+                    // offer option of mave move or pass
+                    // makeMove()
+                    // endMove()
+                }
+
+            }
+        }
 
         // If the players card suit matches the last card added to the pile 
-        if (playedCard.suit === discardPile[discardPile.length - 1].suit) {
+        else if (playedCard.suit === discardPile[discardPile.length - 1].suit) {
             console.log("the card suit matches, card accepted")
 
             //Get the index of the played card in the payers hand
-            const playedCardIndex = currentPlayer.hand.indexOf(playedCard[0])
+            const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && playedCard.rank)
+            console.log("players hand:", currentPlayer.hand)
+            console.log("playedCard index:", playedCardIndex)
+            const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
+            const cardRemovedFromHand = cardspliced[0]
+            console.log("card removed from array:", cardRemovedFromHand)
+            console.log("removed from hand: ", cardspliced)
 
             //Remove from the hand and push to the discard pile
-            discardPile.push(currentPlayer.hand.splice(playedCardIndex, 1))
+            setDiscardPile([...discardPile, cardRemovedFromHand])
 
             //Flatten the discard pile, so there are no nested arrays
-            discardPile = Array.prototype.concat.apply([], discardPile);
+            // discardPile = Array.prototype.concat.apply([], discardPile);
+            console.log(discardPile)
+
         }
 
-        if (playedCard.rank === discardPile[discardPile.length - 1].rank) {
+        else if (playedCard.rank === discardPile[discardPile.length - 1].rank) {
             console.log("the card number matches, card accepted, changing suit")
 
             // The user should be able to choose the suit
@@ -148,23 +196,25 @@ const CrazyEightsLogic = () => {
             //Flatten the discard pile, so there are not nested arrays
             discardPile = Array.prototype.concat.apply([], discardPile);
         }
-        if ("") {
-            if (stockpile.length > 0) {
-                currentPlayer.hand.push(stockpile.length - 1)
-            } else {
-                resetStockPile()
-                currentPlayer.hand.push(stockpile.length - 1)
-                // offer option of mave move or pass
-                // makeMove()
-                // endMove()
-            }
+
+    }
+
+    const pickUp = () => {
+        if (stockPile.length > 0) {
+            currentPlayer.hand.push(stockPile[0].length - 1)
+            console.log(currentPlayer.hand)
+        } else {
+            console.log("we need to shuffle the deck")
+            // resetStockPile()
+            // currentPlayer.hand.push(stockpile.length - 1)
+            // offer option of mave move or pass
+            // makeMove()
+            // endMove()
         }
     }
 
-
-
     //End turn and move to the next player
-    const endMove = () => {
+    const EndTurnMovePlayer = () => {
         if (currentPlayer.hand.length === 0) {
             roundOver();
         }
@@ -254,16 +304,24 @@ const CrazyEightsLogic = () => {
 
     return (<>
         <div className="container">
-            <button onClick={dealHands()}>Start Game</button>
-            <p>testing</p>
-            {loggedInUersPosition.hand.map(card => {
+            <button onClick={() => dealHands()}>1. Deal Cards</button>
+            <button onClick={() => setTable()}>2. Set Table</button>
+            <p>Players hand:</p>
+            {readyRender && currentPlayer.hand.map(card => {
                 return (
-                    <Card rank={card.rank} suit={card.suit} selectedCard={selectedCard} value={card.value} />)
+                    <Card key={card.rank + card.suit} rank={card.rank} suit={card.suit} selectedCard={selectedCard} value={card.value} />)
             })}
+            <p>Other Players Hands:</p>
+            {readyRender && players.map(player => player.hand.map(card => {
+                return (
+                    <Card key={card.rank + card.suit} rank={card.rank} suit={card.suit} selectedCard={selectedCard} value={card.value} />)
+            }))}
+
             <p>Discard Pile:</p>
-            <DiscardPile discardPile={discardPile} />
+            {discardPile && <DiscardPile discardPile={discardPile} />}
             <p>Game Moves:</p>
-            <button></button>
+            <button>Make Move</button>
+            <button  onClick={() => pickUp()}>Pick Up Card</button>
         </div>
     </>)
 }
