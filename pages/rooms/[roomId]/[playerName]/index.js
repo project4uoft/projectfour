@@ -1,3 +1,4 @@
+// after user is logged in he gets redirected to this game room page
 import SidePanel from "../../../../components/gameroom/side-panel/SidePanel";
 import MainPanel from "../../../../components/gameroom/main-panel/MainPanel.js";
 import Meta from "../../../../components/Meta";
@@ -14,6 +15,8 @@ const CREATE_GAME_EVENT = "createGame";
 const UPDATE_GAME_EVENT = "updateGame";
 const END_EVENT = "endBullShit";
 
+// functional component is wrapped in withPageAuthRequired method from auth0 to protect route
+// if user is not signed in - he will be redirected to login page
 export default withPageAuthRequired(function Home() {
   const router = useRouter();
   const { user, error, isLoading } = useUser();
@@ -26,6 +29,7 @@ export default withPageAuthRequired(function Home() {
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
 
+  // Emmit new game event to socket.io when game button clicked in side menu
   const handleClick = (game) => {
     socketRef.current.emit(NEW_GAME_EVENT, {
       roomId: roomId,
@@ -47,6 +51,7 @@ export default withPageAuthRequired(function Home() {
       });
     }
 
+    // If game started send game event to socket.io with game info
     socketRef.current.on(CREATE_GAME_EVENT, ({ game, board }) => {
       console.log(`we're playing ${game}`);
       setPlayer(
@@ -57,11 +62,13 @@ export default withPageAuthRequired(function Home() {
       setWinners(false);
     });
 
+    // Send game end event with winners info
     socketRef.current.on(END_EVENT, ({ winners }) => {
       console.log(`the winners are ${winners}`);
       setWinners(winners);
     });
 
+    // send game update events as game progress
     socketRef.current.on(UPDATE_GAME_EVENT, ({ board }) => {
       console.log(`updating game`);
       console.log(board);
@@ -80,6 +87,7 @@ export default withPageAuthRequired(function Home() {
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
+  // display page content only if user is logged in
   if (user) {
     return (
       <>

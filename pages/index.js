@@ -1,3 +1,4 @@
+// This is default start page with app logo and login buttons
 import Head from "next/head";
 import styles from "../styles/index.module.css";
 import { useUser } from "@auth0/nextjs-auth0";
@@ -7,13 +8,19 @@ import { useRouter } from "next/router";
 import { v4 as uuid } from "uuid";
 import { Container, Grid, Button } from '@material-ui/core';
 
+
 export default function Home() {
+  // Get user info from userProvider context of auth0 library
   const { user, error, isLoading } = useUser();
   const router = useRouter();
 
+  // on the first render and whenever user or loading state chaneges check if user is logged in.
+  // then redirect to game room page
   useEffect(() => {
     if (user) {
+      // generate room id using uuid package
       const roomId = uuid();
+      // redirect user to the games room with roomId and username inserted into url
       router.push(`/rooms/${roomId}/${user.nickname}`);
     }
   }, [user, isLoading]);
@@ -110,7 +117,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
           </Grid>
         </Grid>
       </Container>
