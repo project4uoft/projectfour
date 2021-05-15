@@ -18,7 +18,6 @@ class BullShitBoard {
     this.playerWhoCalledBluff = '';
     this.bluff = 'null';
     this.turnedEnded = false;
-    this.title = 'bullshit';
   }
 
   // create a new game with the array of players

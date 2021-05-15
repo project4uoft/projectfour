@@ -27,7 +27,7 @@ const PLAY_EVENT_BULLSHIT = "playMoveBullShit";
 const CALL_BULLSHIT = "callBullShit";
 const PASS_BULLSHIT = "passBullShit";
 const END_EVENT = "endBullShit";
-const END_TURN_BULLSHIT = "endTurnBullShit"
+const END_TURN_BULLSHIT = "endTurnBullShit";
 
 const PLAY_EVENT_BIGTWO = "playMoveBigTwo";
 const PASS_BIGTWO = "passBigTwo";
@@ -61,8 +61,7 @@ io.on("connection", (socket) => {
         ).length === 0
       ) {
         rooms[index].players.push(new Player(playerName));
-      }
-      else{
+      } else {
         io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
           board: rooms[index].game,
         });
@@ -81,11 +80,10 @@ io.on("connection", (socket) => {
       io.sockets.in(roomId).emit(CREATE_GAME_EVENT, {
         board: room.game,
       });
-    }
-    else if(game === "bigtwo"){
+    } else if (game === "bigtwo") {
       room["game"] = new BigTwoBoard();
       room["game"].newGame(room.players);
-      
+
       io.sockets.in(roomId).emit(CREATE_GAME_EVENT, {
         board: room.game,
       });
@@ -121,7 +119,6 @@ io.on("connection", (socket) => {
     io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
       board: rooms[index].game,
     });
-   
   });
 
   // when player pass in bullshit
@@ -143,14 +140,12 @@ io.on("connection", (socket) => {
       io.sockets.in(roomId).emit(END_EVENT, {
         winners: winners,
       });
-    } 
-    else {
+    } else {
       io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
         board: rooms[index].game,
       });
     }
   });
-
 
   // sockets for Big Two Game
 
@@ -163,19 +158,17 @@ io.on("connection", (socket) => {
       (player) => player.playerName === playerName
     )[0];
     let winners = rooms[index].game.playMove(player, cardIndices);
-    if(winners){
+    if (winners) {
       io.sockets.in(roomId).emit(END_EVENT, {
         winners: winners,
       });
-    }
-    else{
+    } else {
       io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
         board: rooms[index].game,
       });
     }
   });
 
-  
   // when player pass in big two
   socket.on(PASS_BIGTWO, ({ roomId }) => {
     let room = rooms.filter((room) => room.roomId === roomId)[0];
