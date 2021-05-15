@@ -132,18 +132,24 @@ const BullShitPanel = ({ gameBoard, player }) => {
               Would you like to call{" "}
               {gameBoard.players[gameBoard.currentPlayerPos].playerName}{" "}
               bluff? <br />
-              <button
+              <Button
+              
+                variant="contained" 
+                color="primary"
                 className="buttonBluff"
                 onClick={handleYes}
               >
                 Yes
-              </button>
-              <button
+              </Button>
+              <Button
+              
+                variant="contained" 
+                color="primary"
                 className="buttonBluff"
                 onClick={handleNo}
               >
                 No
-              </button>
+              </Button>
             </div>)
           }
           else{
@@ -311,8 +317,9 @@ const BullShitPanel = ({ gameBoard, player }) => {
           ))}
         </Box>
 
-        <button
-          className="flex px-4 py-2 mx-auto mt-1 font-semibold text-blue-700 bg-transparent border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent"
+        <Button 
+          variant="contained" 
+          color="primary"
           type="submit"
           disabled={
             !(
@@ -323,7 +330,7 @@ const BullShitPanel = ({ gameBoard, player }) => {
           }
         >
           Play
-        </button>
+        </Button>
       </form>
       {alert && <YellAlert />}
     </Box>
