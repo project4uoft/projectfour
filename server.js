@@ -25,6 +25,7 @@ const PLAY_EVENT_BULLSHIT = "playMoveBullShit";
 const CALL_BULLSHIT = "callBullShit";
 const PASS_BULLSHIT = "passBullShit";
 const END_EVENT = "endBullShit";
+const END_TURN_BULLSHIT = "endTurnBullShit"
 
 const rooms = [];
 
@@ -74,6 +75,7 @@ io.on("connection", (socket) => {
     }
   });
 
+  // player plays bullshit hand
   socket.on(PLAY_EVENT_BULLSHIT, ({ roomId, playerName, cardIndices }) => {
     let room = rooms.filter((room) => room.roomId === roomId)[0];
     let index = rooms.indexOf(room);
@@ -87,6 +89,7 @@ io.on("connection", (socket) => {
     });
   });
 
+  // other player calls bullshit
   socket.on(CALL_BULLSHIT, ({ roomId, playerName }) => {
     let room = rooms.filter((room) => room.roomId === roomId)[0];
     let index = rooms.indexOf(room);
@@ -94,22 +97,28 @@ io.on("connection", (socket) => {
     let player = rooms[index].game.players.filter(
       (player) => player.playerName === playerName
     )[0];
-    let winners = rooms[index].game.checkBluff(player);
-    if (winners) {
-      io.sockets.in(roomId).emit(END_EVENT, {
-        winners: winners,
-      });
-    } else {
-      io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
-        board: rooms[index].game,
-      });
-    }
+
+    rooms[index].game.checkBluff(player);
+    io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
+      board: rooms[index].game,
+    });
+   
   });
 
   socket.on(PASS_BULLSHIT, ({ roomId }) => {
     let room = rooms.filter((room) => room.roomId === roomId)[0];
     let index = rooms.indexOf(room);
-    let winners = rooms[index].game.passBluff();
+    rooms[index].game.passBluff();
+    io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
+      board: rooms[index].game,
+    });
+  });
+
+  
+  socket.on(END_TURN_BULLSHIT, ({ roomId }) => {
+    let room = rooms.filter((room) => room.roomId === roomId)[0];
+    let index = rooms.indexOf(room);
+    let winners = rooms[index].game.endTurn();
     if (winners) {
       io.sockets.in(roomId).emit(END_EVENT, {
         winners: winners,

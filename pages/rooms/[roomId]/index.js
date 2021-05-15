@@ -1,8 +1,8 @@
 // after user is logged in he gets redirected to this game room page
-import SidePanel from "../../../../components/gameroom/side-panel/SidePanel";
-import MainPanel from "../../../../components/gameroom/main-panel/MainPanel.js";
-import Meta from "../../../../components/Meta";
-import Navbar from "../../../../components/Navbar";
+import SidePanel from "../../../components/gameroom/side-panel/SidePanel";
+import MainPanel from "../../../components/gameroom/main-panel/MainPanel.js";
+import Meta from "../../../components/Meta";
+import Navbar from "../../../components/Navbar";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
@@ -20,9 +20,10 @@ const END_EVENT = "endBullShit";
 export default withPageAuthRequired(function Home() {
   const router = useRouter();
   const { user, error, isLoading } = useUser();
-  const { roomId, playerName } = router.query; // Gets roomId from URL
-  console.log(roomId, playerName);
+  const { roomId } = router.query; // Gets roomId from URL
+  const playerName = user.nickname;
   const socketRef = useRef();
+  
 
   const [gameBoard, setGameBoard] = useState(null);
   const [gameTitle, setGameTitle] = useState(null);

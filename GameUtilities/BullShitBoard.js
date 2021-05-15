@@ -7,15 +7,20 @@ class BullShitBoard {
     this.discardPile = [];
     this.players = [];
     this.currentCall = 0; 
-    this.lastCallAmount = '';  
+    this.lastCallAmount = 0;  
     this.currentPlayer = '';
     this.currentPlayerPos = 0; 
     this.winners = [];
     this.ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
     this.bluffPhase = false;
     this.numPassBluff = 0;
+    this.lastPlayedHand = [];
+    this.playerWhoCalledBluff = '';
+    this.bluff = 'null';
+    this.turnedEnded = false;
   }
 
+  // create a new game with the array of players
   newGame(players){
     //set the players in the game
     this.players = players;
@@ -40,10 +45,12 @@ class BullShitBoard {
     this.players.forEach(player => this.sortCard(player));
   }
 
+  // sort the cards in numerial order
   sortCard(player){
     player.playerCards.sort((a,b)=>a.value-b.value)
   }
 
+  // get the current rank for the round
   getCurrentCall(){
     return this.ranks[this.currentCall]
   }
@@ -59,45 +66,56 @@ class BullShitBoard {
     //set current player
     this.currentPlayer = player;
     this.lastCallAmount = cardIndices.length;
+    this.lastPlayedHand = this.discardPile.slice(-this.lastCallAmount);
     this.bluffPhase = true;
+    this.playerWhoPickedUp = '';
+    this.bluff = 'null';
+    this.turnedEnded = false;
   }
 
   endTurn(){
-    
-    this.numPassBluff = 0;
-    this.bluffPhase = false;
-    this.currentCall = (this.currentCall + 1)%13;
-    if(this.currentPlayer.playerCards.length === 0){
-      this.winners.push(this.currentPlayer);
-      if(this.winners.length === this.players.length - 1) {
-        return this.winners
+    if(!this.turnedEnded){
+      this.turnedEnded = true;
+      this.lastCallAmount = 0; 
+      this.lastPlayedHand = []; 
+      this.playerWhoCalledBluff = '';
+      this.numPassBluff = 0;
+      this.bluffPhase = false;
+      this.bluff = 'null';
+      this.currentCall = (this.currentCall + 1)%13;
+      if(this.currentPlayer.playerCards.length === 0){
+        this.winners.push(this.currentPlayer);
+        if(this.winners.length === this.players.length - 1) {
+          return this.winners
+        }
       }
+      do{
+        this.currentPlayerPos = (this.currentPlayerPos + 1) % this.players.length; 
+      } while(this.players[this.currentPlayerPos].playerCards.length === 0)
+      return false
     }
-    do{
-      this.currentPlayerPos = (this.currentPlayerPos + 1) % this.players.length; 
-    } while(this.players[this.currentPlayerPos].playerCards.length === 0)
-    return false
+    else return false;
   }
 
   checkBluff(player){
-    if(this.discardPile.slice(-this.lastCallAmount).every(card => card.rank === this.ranks[this.currentCall])){
-      console.log('truth')
+    this.playerWhoCalledBluff = player;
+    if(this.lastPlayedHand.every(card => card.rank === this.ranks[this.currentCall])){
       this.discardPile.forEach(card => player.playerCards.push(card))
       this.sortCard(player)
+      this.bluff = 'truth';
     }
     else{
-      console.log('bluff')
       this.discardPile.forEach(card => this.currentPlayer.playerCards.push(card))
       this.sortCard(this.currentPlayer)
+      this.bluff = 'bluff';
     }
     this.discardPile = [];
-    return this.endTurn();
   }
 
   passBluff() {
     this.numPassBluff++;
     if(this.numPassBluff === (this.players.length-this.winners.length-1)){
-      return this.endTurn();
+      this.bluff = 'pass'
     }
   }
 
