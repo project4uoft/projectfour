@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import { motion } from "framer-motion";
-import Box from "@material-ui/core/Box";
+import Image from "next/image";
+import { Grid, Button, Typography } from '@material-ui/core';
+import { useRouter } from "next/router";
+import { v4 as uuid } from "uuid";
+import { useUser } from "@auth0/nextjs-auth0";
+
 
 const Variants = {
     showCard: {
@@ -12,30 +17,30 @@ const Variants = {
         transition: { duration: 1.5 }
     },
     frontCard: {
-        backgroundColor: "red",
-        height: 200,
-        width: 200,
-        borderRadius: 25,
+        backgroundColor: "white",
+        height: 450,
+        width: 300,
+        borderRadius: 37,
         position: "absolute",
-        padding: 20,
         WebkitBackfaceVisibility: "hidden",
         BackfaceVisibility: "hidden",
         rotateY: 0
     },
     backCard: {
-        background: "#19D2A7",
-        height: 200,
-        width: 200,
-        borderRadius: 25,
-        // position: "absolute",
-        padding: 20,
+        background: "white",
+        height: 450,
+        width: 300,
+        borderRadius: 37,
         WebkitBackfaceVisibility: "hidden",
         BackfaceVisibility: "hidden",
         rotateY: 180
     }
 }
 
-function WelcomeCard() {
+function WelcomeCard({ name, image, description }) {
+
+    const { user } = useUser();
+    const router = useRouter();
 
     const [isHovered, setIsHovered] = useState(false);
 
@@ -43,13 +48,19 @@ function WelcomeCard() {
         setIsHovered(!isHovered);
     }
 
+
     const Front = (
         <motion.div
             variants={Variants}
             initial={"frontCard"}
             animate={isHovered ? "hideCard" : "showCard"}
         >
-           FRONT
+            <Image
+                src={image}
+                alt="logo"
+                width={300}
+                height={450}
+            ></Image>
         </motion.div>
     )
 
@@ -58,19 +69,50 @@ function WelcomeCard() {
             variants={Variants}
             initial={"backCard"}
             animate={isHovered ? "showCard" : "hideCard"}
-        >Back</motion.div>
+        >
+            <div style={{ padding: 15, overflow: "hidden" }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant="h4" color="primary">
+                            {name}
+                        </Typography>
+                        <hr></hr>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <div style={{
+                            height: 280, textAlign: "justify", overflowY: "hidden"
+                        }}>
+                            <Typography color="textSecondary">
+                                {description}
+                            </Typography>
+                        </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained" color="primary"
+                            onClick={() => {
+                                const roomId = uuid();
+                                router.push(`/rooms/${roomId}/${user.nickname}`);
+                            }}
+                        >
+                            Play in Private Room
+                        </Button>
+                    </Grid>
+                </Grid>
+            </div>
+        </motion.div>
     )
+
     return (
-        <Box
+        <div
             onMouseEnter={HandleFlip}
             onMouseLeave={HandleFlip}
         >
             {Front}
             {Back}
 
-        </Box>
-
+        </div>
     )
 }
 
-export default WelcomeCard
+export default WelcomeCard;
