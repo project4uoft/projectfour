@@ -21,7 +21,10 @@ export default function Home() {
       // generate room id using uuid package
       const roomId = uuid();
       // redirect user to the games room with roomId and username inserted into url
-      router.push(`/rooms/${roomId}/${user.nickname}`);
+    
+      //   router.push(`/rooms/${roomId}/${user.nickname}`);
+      router.push(`/welcome`);
+
     }
   }, [user, isLoading]);
 
