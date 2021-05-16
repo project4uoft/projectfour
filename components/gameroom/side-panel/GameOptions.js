@@ -1,10 +1,9 @@
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import gameRoomStyles from "../../../styles/GameRoom.module.css";
 
-const GameOptions = ({ handleClick }) => {
+const GameOptions = ({ handleClick, gameBoard }) => {
   return (
-    <section className="flex flex-col p-6 m-5 border-2 border-white rounded-md">
-      {/* Links to change te game play */}
-      {/* Not sure if we can move this custom CSS into tailwind? */}
+    <>
       <a
         className={gameRoomStyles.sidePanelButton}
         onClick={() => handleClick("tictactoe")}
@@ -29,7 +28,7 @@ const GameOptions = ({ handleClick }) => {
       >
         Big Two
       </a>
-    </section>
+    </>
   );
 };
 

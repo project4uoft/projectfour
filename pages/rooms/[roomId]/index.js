@@ -23,7 +23,6 @@ export default withPageAuthRequired(function Home() {
   const { roomId } = router.query; // Gets roomId from URL
   const playerName = user.nickname;
   const socketRef = useRef();
-  
 
   const [gameBoard, setGameBoard] = useState(null);
   const [player, setPlayer] = useState(null);
@@ -97,8 +96,8 @@ export default withPageAuthRequired(function Home() {
       <>
         <Meta title="Game Room" />
         <Navbar />
-        <div className="flex flex-row flex-auto h-screen">
-          <SidePanel handleClick={handleClick} />
+        <div style={{ display: "flex" }}>
+          <SidePanel handleClick={handleClick} gameBoard={gameBoard} />
           <MainPanel
             roomId={roomId}
             player={player}

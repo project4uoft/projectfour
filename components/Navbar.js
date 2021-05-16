@@ -7,6 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import ExitToApp from "@material-ui/icons/ExitToApp";
+import { useUser } from "@auth0/nextjs-auth0";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -20,17 +21,21 @@ const useStyles = makeStyles((theme) =>
       flexGrow: 1,
       marginLeft: 10,
     },
+    appBar: {
+      zIndex: theme.zIndex.drawer + 1,
+    },
   })
 );
 
 export default function Navbar({ fixed }) {
+  const { user } = useUser();
   const router = useRouter();
-  const { roomId, playerName } = router.query; // Gets roomId from URL
+  const { roomId } = router.query; // Gets roomId from URL
   const classes = useStyles();
   return (
     <>
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <Typography align="justify">
               <Image
@@ -48,7 +53,7 @@ export default function Navbar({ fixed }) {
               Room: <small>{roomId}</small>
             </Typography>
             <Typography variant="h6" className={classes.title}>
-              Welcome: {playerName}
+              Welcome: {user.nickname}
             </Typography>
             <Button
               variant="contained"
@@ -62,47 +67,6 @@ export default function Navbar({ fixed }) {
           </Toolbar>
         </AppBar>
       </div>
-
-      {/* <nav>
-        <div>
-          <Image
-            src={`/assets/images/homepage/Logo1.png`}
-            alt="logo"
-            width={40}
-            height={40}
-          />
-          <div>
-            <a href="#">
-              Party House Game Room: <span>{roomId}</span>
-            </a>
-            <button type="button" onClick={() => setNavbarOpen(!navbarOpen)}>
-              <i className="fas fa-bars"></i>
-            </button>
-          </div>
-          <span>Welcome: {playerName}</span>
-          <ul>
-            <li>
-              <a href="/api/auth/logout">
-                <span>Logout</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-6 h-6 ml-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav> */}
     </>
   );
 }

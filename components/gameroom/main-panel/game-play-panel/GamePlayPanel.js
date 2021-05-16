@@ -39,11 +39,7 @@ const GamePlayPanel = ({ gameBoard, player, winners }) => {
     }
   }, [gameBoard, winners]);
 
-  return (
-    <section className="flex flex-row justify-center p-2 m-4 border-2 border-black rounded-md h-3/5">
-      {board}
-    </section>
-  );
+  return <section>{board}</section>;
 };
 
 export default GamePlayPanel;

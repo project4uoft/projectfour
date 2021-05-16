@@ -142,12 +142,22 @@ const BullShitPanel = ({ gameBoard, player }) => {
                 Would you like to call{" "}
                 {gameBoard.players[gameBoard.currentPlayerPos].playerName}{" "}
                 bluff? <br />
-                <button className="buttonBluff" onClick={handleYes}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="buttonBluff"
+                  onClick={handleYes}
+                >
                   Yes
-                </button>
-                <button className="buttonBluff" onClick={handleNo}>
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="buttonBluff"
+                  onClick={handleNo}
+                >
                   No
-                </button>
+                </Button>
               </div>
             );
           } else {

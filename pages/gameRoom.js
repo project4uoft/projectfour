@@ -14,7 +14,7 @@ export default withPageAuthRequired(function GameRoom() {
       <>
         <Meta title="Game Room" />
         <Navbar />
-        <div className="flex flex-row flex-auto h-screen">
+        <div>
           <SidePanel />
           <MainPanel />
         </div>
