@@ -92,7 +92,7 @@ function WelcomeCard({ name, image, description }) {
                             variant="contained" color="primary"
                             onClick={() => {
                                 const roomId = uuid();
-                                router.push(`/rooms/${roomId}/${user.nickname}`);
+                                router.push(`/rooms/${roomId}`);
                             }}
                         >
                             Play in Private Room
