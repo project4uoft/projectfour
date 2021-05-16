@@ -46,8 +46,15 @@ const BullShitPanel = ({ gameBoard, player }) => {
   const [pass, setPass] = useState(false)
   const [bluffing, setBluffing] = useState(false)
 
+  
+  let playerIndex = gameBoard.players.indexOf(player);
+  const playerOrder = [];
+  for(let i = 1; i < gameBoard.players.length; i++){
+    playerOrder.push((playerIndex + i)%gameBoard.players.length)
+  }
+
   const router = useRouter();
-  const { roomId, playerName } = router.query; // Gets roomId from URL
+  const { roomId } = router.query; // Gets roomId from URL
 
   const socketRef = useRef();
   socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
@@ -234,8 +241,8 @@ const BullShitPanel = ({ gameBoard, player }) => {
         {topMessage}
         </Typography>
 
-        <OtherPlayer players={gameBoard.players
-        .filter((p) => p.playerName !== player.playerName)} />
+        <OtherPlayer players={playerOrder.map(index => gameBoard.players[index])
+        } />
 
         <Grid container spacing={3}>
           <Grid item xs={6} className={classes.discardPile}>

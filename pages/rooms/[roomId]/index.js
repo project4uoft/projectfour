@@ -26,7 +26,6 @@ export default withPageAuthRequired(function Home() {
   
 
   const [gameBoard, setGameBoard] = useState(null);
-  const [gameTitle, setGameTitle] = useState(null);
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
 
@@ -36,6 +35,7 @@ export default withPageAuthRequired(function Home() {
       roomId: roomId,
       game: game,
     });
+    console.log(game)
   };
 
   useEffect(() => {
@@ -53,13 +53,12 @@ export default withPageAuthRequired(function Home() {
     }
 
     // If game started send game event to socket.io with game info
-    socketRef.current.on(CREATE_GAME_EVENT, ({ game, board }) => {
-      console.log(`we're playing ${game}`);
+    socketRef.current.on(CREATE_GAME_EVENT, ({ board }) => {
+      console.log(board)
       setPlayer(
         board.players.filter((player) => player.playerName === playerName)[0]
       );
       setGameBoard(board);
-      setGameTitle(game);
       setWinners(false);
     });
 
@@ -71,8 +70,6 @@ export default withPageAuthRequired(function Home() {
 
     // send game update events as game progress
     socketRef.current.on(UPDATE_GAME_EVENT, ({ board }) => {
-      console.log(`updating game`);
-      console.log(board);
       setPlayer(
         board.players.filter((player) => player.playerName === playerName)[0]
       );
@@ -98,12 +95,10 @@ export default withPageAuthRequired(function Home() {
           <SidePanel handleClick={handleClick} />
           <MainPanel
             roomId={roomId}
-            gameTitle={gameTitle}
             player={player}
             gameBoard={gameBoard}
             winners={winners}
             players={gameBoard ? gameBoard.players : []}
-            game={gameTitle}
           />
         </div>
       </>

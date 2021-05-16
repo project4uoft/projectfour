@@ -16,16 +16,21 @@ const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 
 const Player = require("./GameUtilities/Player");
 const BullShitBoard = require("./GameUtilities/BullShitBoard");
+const BigTwoBoard = require("./GameUtilities/BigTwoBoard");
 // testing multiplayer
 const NEW_PLAYER_JOINED = "newPlayerJoin";
 const NEW_GAME_EVENT = "newGame";
 const CREATE_GAME_EVENT = "createGame";
 const UPDATE_GAME_EVENT = "updateGame";
+
 const PLAY_EVENT_BULLSHIT = "playMoveBullShit";
 const CALL_BULLSHIT = "callBullShit";
 const PASS_BULLSHIT = "passBullShit";
 const END_EVENT = "endBullShit";
 const END_TURN_BULLSHIT = "endTurnBullShit"
+
+const PLAY_EVENT_BIGTWO = "playMoveBigTwo";
+const PASS_BIGTWO = "passBigTwo";
 
 const rooms = [];
 
@@ -69,11 +74,20 @@ io.on("connection", (socket) => {
       room["game"].newGame(room.players);
 
       io.sockets.in(roomId).emit(CREATE_GAME_EVENT, {
-        game: game,
+        board: room.game,
+      });
+    }
+    else if(game === "bigtwo"){
+      room["game"] = new BigTwoBoard();
+      room["game"].newGame(room.players);
+      
+      io.sockets.in(roomId).emit(CREATE_GAME_EVENT, {
         board: room.game,
       });
     }
   });
+
+  // sockets for Bullshit Game
 
   // player plays bullshit hand
   socket.on(PLAY_EVENT_BULLSHIT, ({ roomId, playerName, cardIndices }) => {
@@ -105,6 +119,7 @@ io.on("connection", (socket) => {
    
   });
 
+  // when player pass in bullshit
   socket.on(PASS_BULLSHIT, ({ roomId }) => {
     let room = rooms.filter((room) => room.roomId === roomId)[0];
     let index = rooms.indexOf(room);
@@ -114,7 +129,7 @@ io.on("connection", (socket) => {
     });
   });
 
-  
+  // end turn in bullshit
   socket.on(END_TURN_BULLSHIT, ({ roomId }) => {
     let room = rooms.filter((room) => room.roomId === roomId)[0];
     let index = rooms.indexOf(room);
@@ -128,6 +143,41 @@ io.on("connection", (socket) => {
         board: rooms[index].game,
       });
     }
+  });
+
+
+  // sockets for Big Two Game
+
+  // player plays a move in big two
+  socket.on(PLAY_EVENT_BIGTWO, ({ roomId, playerName, cardIndices }) => {
+    let room = rooms.filter((room) => room.roomId === roomId)[0];
+    let index = rooms.indexOf(room);
+
+    let player = rooms[index].game.players.filter(
+      (player) => player.playerName === playerName
+    )[0];
+    let winners = rooms[index].game.playMove(player, cardIndices);
+    if(winners){
+      io.sockets.in(roomId).emit(END_EVENT, {
+        winners: winners,
+      });
+    }
+    else{
+      io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
+        board: rooms[index].game,
+      });
+    }
+  });
+
+  
+  // when player pass in big two
+  socket.on(PASS_BIGTWO, ({ roomId }) => {
+    let room = rooms.filter((room) => room.roomId === roomId)[0];
+    let index = rooms.indexOf(room);
+    rooms[index].game.pass();
+    io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
+      board: rooms[index].game,
+    });
   });
 
   // Leave the room if the user closes the socket
