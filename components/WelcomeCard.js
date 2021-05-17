@@ -5,6 +5,7 @@ import { Grid, Button, Typography } from '@material-ui/core';
 import { useRouter } from "next/router";
 import { v4 as uuid } from "uuid";
 import { useUser } from "@auth0/nextjs-auth0";
+import styles from "../styles/WelcomeCard.module.css";
 
 
 const Variants = {
@@ -73,7 +74,7 @@ function WelcomeCard({ name, image, description }) {
             <div style={{ padding: 15, overflow: "hidden" }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Typography variant="h4" color="primary">
+                        <Typography variant="h4" color="primary" style={{textAlign: 'center'}}>
                             {name}
                         </Typography>
                         <hr></hr>
@@ -87,17 +88,20 @@ function WelcomeCard({ name, image, description }) {
                             </Typography>
                         </div>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            variant="contained" color="primary"
-                            onClick={() => {
-                                const roomId = uuid();
-                                router.push(`/rooms/${roomId}/${user.nickname}`);
-                            }}
-                        >
-                            Play in Private Room
-                        </Button>
-                    </Grid>
+
+                    <div className={styles.buttonCenter}>
+                        <Grid item xs={12}>
+                            <Button 
+                                variant="contained" color="primary"
+                                onClick={() => {
+                                    const roomId = uuid();
+                                    router.push(`/rooms/${roomId}/${user.nickname}`);
+                                }}
+                            >
+                                Play in Private Room
+                            </Button>
+                        </Grid>
+                    </div>
                 </Grid>
             </div>
         </motion.div>
