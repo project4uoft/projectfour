@@ -47,6 +47,7 @@ export default function Home() {
             </Grid>
 
             {/* Column2 */}
+            <div className={styles.centerImage}>
             <Grid item xs={12} sm={6} md={6} lg={6}>
 
 
@@ -75,7 +76,7 @@ export default function Home() {
                       <Grid item xs={12} sm={12} md={12} lg={12}>
 
                       <Link href="/api/auth/login">
-                        <Button variant="contained" color="primary" variant="contained" fullWidth className={styles.button1}>
+                        <Button variant="contained" color="primary" variant="contained" className={styles.button1}>
                           <span className={styles.font}>SIGN UP</span>
                         </Button>
                       </Link>
@@ -85,7 +86,7 @@ export default function Home() {
                       <Grid item xs={12} sm={12} md={12} lg={12}>
 
                       <Link href="/api/auth/login">
-                        <Button variant="contained" color="primary" variant="contained" fullWidth className={styles.button2}>
+                        <Button variant="contained" color="primary" variant="contained" className={styles.button2}>
                           <span className={styles.font}>LOGIN</span>
                         </Button>
                       </Link>
@@ -95,7 +96,7 @@ export default function Home() {
                       <Grid item xs={12} sm={12} md={12} lg={12}>
 
                       <Link href="/api/auth/login">
-                        <Button variant="contained" color="primary" variant="contained" fullWidth className={styles.button3}>
+                        <Button variant="contained" color="primary" variant="contained" className={styles.button3}>
                           <span className={styles.font}>GUEST</span>
                         </Button>
                       </Link>
@@ -121,6 +122,9 @@ export default function Home() {
               </div>
             </div>
           </Grid>
+
+        </div>
+
         </Grid>
       </Container>
     </div>
