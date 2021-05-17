@@ -23,7 +23,6 @@ export default withPageAuthRequired(function Home() {
   const { roomId } = router.query; // Gets roomId from URL
   const playerName = user.nickname;
   const socketRef = useRef();
-
   const [gameBoard, setGameBoard] = useState(null);
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
@@ -87,6 +86,13 @@ export default withPageAuthRequired(function Home() {
     };
   }, [gameBoard, roomId, player]);
 
+  useEffect(() => {
+    if (router.query.game) {
+      const game = router.query.game.toLowerCase();
+      handleClick(game);
+    }
+  }, []);
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
   // display page content only if user is logged in
@@ -97,7 +103,7 @@ export default withPageAuthRequired(function Home() {
         <Meta title="Game Room" />
         <Navbar />
         <div style={{ display: "flex" }}>
-          <SidePanel handleClick={handleClick} gameBoard={gameBoard} />
+          <SidePanel gameTitle={gameTitle} handleClick={handleClick} />
           <MainPanel
             roomId={roomId}
             player={player}

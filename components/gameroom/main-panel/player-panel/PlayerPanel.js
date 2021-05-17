@@ -5,19 +5,14 @@ import PlayerCard from "./PlayerCard";
 const PlayerPanel = ({ players, roomId, game }) => {
   console.log("players", players, roomId, game);
   return (
-    <section className="flex flex-row justify-around p-2 m-4 border-2 border-black rounded-md h-1/5">
-      <div className="self-auto p-2 m-2 text-center border border-gray-300 rounded w-52">
+    <section>
+      <div>
         <p>
-          <strong className="text-gray-600">Room:</strong>
-          <br />
-          {roomId}
-        </p>
-        <p>
-          <strong className="text-gray-600">Game:</strong> {game}
+          <strong>Game:</strong> {game}
         </p>
         <ul>
           {players.map((player) => {
-            return <li>{player.playerName}</li>;
+            return <li key={player.playerName}>{player.playerName}</li>;
           })}
         </ul>
       </div>

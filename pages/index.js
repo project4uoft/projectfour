@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { v4 as uuid } from "uuid";
 import { Container, Grid, Button } from "@material-ui/core";
+import { nanoid } from "nanoid";
 
 export default function Home() {
   // Get user info from userProvider context of auth0 library
@@ -18,9 +19,9 @@ export default function Home() {
   useEffect(() => {
     if (user) {
       // generate room id using uuid package
-      const roomId = uuid();
+      const roomId = nanoid(6);
       // redirect user to the games room with roomId and username inserted into url
-      router.push(`/rooms/${roomId}/`);
+      router.push(`/welcome`);
     }
   }, [user, isLoading]);
 

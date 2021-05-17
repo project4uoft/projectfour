@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const Chatroom = ({ gameBoard }) => {
+const Chatroom = ({ gameTitle }) => {
   const classes = useStyles();
   const router = useRouter();
   const { user } = useUser();
@@ -103,7 +103,7 @@ const Chatroom = ({ gameBoard }) => {
     // <section className={gameRoomStyles.innerSidePanelContainer}></section>
     <List>
       <WhiteTextTypography>
-        <ListItem>Now Playing: {gameBoard}</ListItem>
+        <ListItem>Now Playing: {gameTitle}</ListItem>
 
         <ListItem button>
           <ListItemIcon>
@@ -127,7 +127,8 @@ const Chatroom = ({ gameBoard }) => {
               >
                 <ListItemText>
                   <strong>{message.user}</strong>
-                  <div>{message.body}</div>
+                  <br />
+                  {message.body}
                 </ListItemText>
               </ListItem>
             ))}
@@ -144,7 +145,6 @@ const Chatroom = ({ gameBoard }) => {
         <Button
           className={classes.sendBtn}
           variant="contained"
-          Default
           disabled={newMessage.length === 0}
           onClick={handleSendMessage}
           type="submit"

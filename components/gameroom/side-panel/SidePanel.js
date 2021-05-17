@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-const SidePanel = ({ handleClick, gameBoard }) => {
+const SidePanel = ({ gameTitle, handleClick }) => {
   const classes = useStyles();
   return (
     <>
@@ -45,8 +45,8 @@ const SidePanel = ({ handleClick, gameBoard }) => {
         }}
       >
         <Toolbar />
-        {/* <GameOptions handleClick={handleClick} gameBoard={gameBoard} /> */}
-        <Chatroom gameBoard={gameBoard} />
+        <GameOptions handleClick={handleClick} />
+        <Chatroom gameBoard={gameTitle} />
       </Drawer>
     </>
   );
