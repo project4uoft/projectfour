@@ -14,7 +14,7 @@ export default function Navbar() {
 
                 {/* <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/></svg> */}
                 <img src='./assets/images/welcome/Logo.png' alt='Logo' />
-                <span class="font-semibold text-xl tracking-tight">Party House</span>
+                <span class="font-semibold text-xl tracking-tight">House</span>
             </div>
 
             {/* <div class="block lg:hidden">
@@ -36,6 +36,7 @@ export default function Navbar() {
                     </a> */}
                 </div>
                 <div>
+                
                     <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
                         Logout
                     </a>
