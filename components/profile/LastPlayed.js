@@ -32,7 +32,7 @@ const useStyles = makeStyles({
         width: '70%',
         marginLeft: '20%',
         border: '3px solid #3f51b5',
-        boxShadow: 'white 0px 5px 15px',
+        boxShadow: 'white 0px 3px 5px',
         borderRadius: '30%',
         fontSize: '30px',
         marginRight: '10%',

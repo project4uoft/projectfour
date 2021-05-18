@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
 
 import { createStyles, makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
 import Navbar from "../components/Navbar";
 import Meta from "../components/Meta";
@@ -32,6 +33,13 @@ const useStyles = makeStyles((theme) =>
             display: 'grid',
             gridTemplateRows: "1fr 1fr",
         },
+
+        ranked: {
+            display: 'block',
+            width: '100%',
+            fontSize: '2em',
+            textShadow: ['white 1px 1px 2px','black 10px 10px 20px']
+        }
     }))
 
 export default withPageAuthRequired(function Profile() {
@@ -52,11 +60,14 @@ export default withPageAuthRequired(function Profile() {
                 <div className={classes.cardContainer}>
                     <UserBox user={user} />
                     <div className={classes.middleContainer}>
-                        <LastPlayed 
+                        <LastPlayed
                             score={"4/7"}
                             game={'Tic-Tac-Toe'}
                         />
                         <div>
+
+                            <Typography className={classes.ranked}>Ranked
+            </Typography>
                             <Ranked />
                             <Ranked />
                         </div>
