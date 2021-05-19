@@ -62,6 +62,11 @@ io.on("connection", (socket) => {
       ) {
         rooms[index].players.push(new Player(playerName));
       }
+      else{
+        io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
+          board: rooms[index].game,
+        });
+      }
     }
     socket.join(roomId);
   });
@@ -138,7 +143,8 @@ io.on("connection", (socket) => {
       io.sockets.in(roomId).emit(END_EVENT, {
         winners: winners,
       });
-    } else {
+    } 
+    else {
       io.sockets.in(roomId).emit(UPDATE_GAME_EVENT, {
         board: rooms[index].game,
       });

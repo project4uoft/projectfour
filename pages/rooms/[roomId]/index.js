@@ -28,6 +28,7 @@ export default withPageAuthRequired(function Home() {
   const [gameBoard, setGameBoard] = useState(null);
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
+  const [refresh, setRefresh] = useState(true)
 
   // Emmit new game event to socket.io when game button clicked in side menu
   const handleClick = (game) => {
@@ -45,12 +46,16 @@ export default withPageAuthRequired(function Home() {
     });
 
     // Listens for incoming messages
-    if (roomId !== undefined) {
-      socketRef.current.emit(NEW_PLAYER_JOINED, {
-        roomId: roomId,
-        playerName: playerName,
-      });
+    if(refresh){
+      if (roomId !== undefined) {
+        socketRef.current.emit(NEW_PLAYER_JOINED, {
+          roomId: roomId,
+          playerName: playerName,
+        });
+      }
+      setRefresh(false)
     }
+    
 
     // If game started send game event to socket.io with game info
     socketRef.current.on(CREATE_GAME_EVENT, ({ board }) => {
@@ -87,6 +92,7 @@ export default withPageAuthRequired(function Home() {
   if (error) return <div>{error.message}</div>;
   // display page content only if user is logged in
   if (user) {
+    console.log(gameBoard, roomId, player)
     return (
       <>
         <Meta title="Game Room" />
