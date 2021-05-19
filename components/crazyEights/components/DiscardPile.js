@@ -4,9 +4,9 @@ import CardComponent from './CardComponent'
 
 function DiscardPile({discardPile}) {
 
-    console.log("discard pile in component:", discardPile)
-    const lastItemInArray = discardPile[discardPile.length - 1]
-    console.log("last item in array:", lastItemInArray)
+    // console.log("discard pile in component:", discardPile)
+    // const lastItemInArray = discardPile[discardPile.length - 1]
+    // console.log("last item in array:", lastItemInArray)
 
     return(
 
