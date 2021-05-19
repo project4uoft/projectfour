@@ -59,7 +59,7 @@ export default function Welcome() {
                 <Grid container spacing={2}>
                     {/* Column1 - Form */}
                     <Grid item xs={12}>
-                        <Box style={{ display: "flex", justifyContent: "space-between", flexDirection: "column" }}>
+                        <Box style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", marginTop: '50px', marginBottom: '50px' }}>
                             <TextField
                                 label="Enter Room ID"
                                 variant="filled"

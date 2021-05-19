@@ -57,43 +57,56 @@
 }
 
 .vertical {
-  margin-top: 20%;
+  margin-top: 25%;
+  text-align: center;
 }
 
 .button1 {
     background-color: black !important;
+    width: 70% !important;
 }
 
 .button2 {
   background-color: #BBB2E9 !important;
+  width: 70% !important;
 }
 
 .button3 {
   background-color: #51225E !important;
+  width: 70% !important;
 }
 
 .font {
   font-size: 25px;
 }
 
+.centerImage {
+  margin-top: 8%;
+}
+
   /* MEDIA QUERIES */
 /* Extra small devices (Tested with Iphone X) */
 /* @media (min-width: 360px) { .outer .top {margin-left: 0px; margin-top: 30px; width:  110px; height:180px; border-radius: 15px;}}
 @media (min-width: 360px) { .buttons {font-size: 5px;}}  */
+@media (min-width: 360px) { .outer .below {display: none;}}  
 
 /* Small devices (landscape phones, 576px and up) */
 /* @media (min-width: 576px) { .outer .top {margin-left: 40px; margin-top: 45px; width: 160px; height:250px; border-radius: 15px;}}
 @media (min-width: 576px) { .buttons {font-size: 10px;}}  */
+@media (min-width: 576px) { .outer .below {display: block;}}  
 
 /* Medium devices (tablets, 768px and up) */
 /* @media (min-width: 768px) { .outer .top {margin-left: 70px; margin-top: 50px; width: 200px; height:300px; border-radius: 25px;}}
 @media (min-width: 768px) { .buttons {font-size: 15px;}}  */
+@media (min-width: 768px) { .outer .below {display: block;}}  
 
 /* // Large devices (desktops, 992px and up) */
 /* @media (min-width: 992px) { .outer .top {margin-left: 100px; margin-top: 56px; width: 254px; height: 385px; border-radius: 25px;}}
 @media (min-width: 992px) { .buttons {font-size: 20px;}}  */
+@media (min-width: 992px) { .outer .below {display: block;}}  
 
 /* // Extra large devices (large desktops, 1200px and up) */
 /* @media (min-width: 1200px) { .outer .top {margin-left: 102px; margin-top: 56px; width: 254px; height: 370px; border-radius: 25px;}} 
 @media (min-width: 1200px) { .buttons {font-size: 20px;}}  */
+@media (min-width: 1200px) { .outer .below {display: block;}}  
 
