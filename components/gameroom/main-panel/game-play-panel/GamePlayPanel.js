@@ -7,7 +7,7 @@ const GamePlayPanel = ({ gameBoard, player, winners }) => {
   const [board, setBoard] = useState(<div>Select Game to Play!</div>);
 
   useEffect(() => {
-    if(gameBoard!== null){
+    if (gameBoard !== null) {
       if (gameBoard.title === "bullshit") {
         if (winners) {
           setBoard(
@@ -22,7 +22,7 @@ const GamePlayPanel = ({ gameBoard, player, winners }) => {
       } else if (gameBoard.title === "mafia") {
         console.log("the game is mafia");
       } else if (gameBoard.title === "bigtwo") {
-        console.log(winners)
+        console.log(winners);
         if (winners) {
           setBoard(
             <div>

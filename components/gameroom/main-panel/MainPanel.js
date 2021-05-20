@@ -2,7 +2,6 @@ import PlayerPanel from "./player-panel/PlayerPanel";
 import GamePlayPanel from "./game-play-panel/GamePlayPanel.js";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
-import { ContactSupportOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -39,7 +38,7 @@ const MainPanel = ({
             <PlayerPanel players={players} roomId={roomId} game={game} />
           </>
         ) : (
-          <h1>{`Waiting for players to join ${gameTitle} game...`}</h1>
+          <h1>{`Waiting for players to join ${gameBoard?.title} game...`}</h1>
         )}
       </main>
     </>

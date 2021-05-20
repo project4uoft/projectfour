@@ -56,58 +56,6 @@ function WelcomeCard({ name, image, description, handleGameJoin }) {
     </motion.div>
   );
 
-<<<<<<< HEAD
-    const Front = (
-        <motion.div
-            variants={Variants}
-            initial={"frontCard"}
-            animate={isHovered ? "hideCard" : "showCard"}
-        >
-            <Image
-                src={image}
-                alt="logo"
-                width={300}
-                height={450}
-            ></Image>
-        </motion.div>
-    )
-
-    const Back = (
-        <motion.div
-            variants={Variants}
-            initial={"backCard"}
-            animate={isHovered ? "showCard" : "hideCard"}
-        >
-            <div style={{ padding: 15, overflow: "hidden" }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Typography variant="h4" color="primary" style={{textAlign: 'center'}}>
-                            {name}
-                        </Typography>
-                        <hr></hr>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <div style={{
-                            height: 280, textAlign: "justify", overflowY: "hidden"
-                        }}>
-                            <Typography color="textSecondary">
-                                {description}
-                            </Typography>
-                        </div>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            variant="contained" color="primary"
-                            onClick={() => {
-                                const roomId = uuid();
-                                router.push(`/rooms/${roomId}`);
-                            }}
-                        >
-                            Play in Private Room
-                        </Button>
-                    </Grid>
-                </Grid>
-=======
   const Back = (
     <motion.div
       variants={Variants}
@@ -131,7 +79,6 @@ function WelcomeCard({ name, image, description, handleGameJoin }) {
               }}
             >
               <Typography color="textSecondary">{description}</Typography>
->>>>>>> 4aff99a... Style main game room, redirect to game after welcome page
             </div>
           </Grid>
           <Grid item xs={12}>

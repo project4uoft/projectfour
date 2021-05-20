@@ -54,28 +54,6 @@ export default function Welcome() {
       </Head>
       <Navbar />
 
-<<<<<<< HEAD
-            <Container maxWidth="lg">
-                <Grid container spacing={2}>
-                    {/* Column1 - Form */}
-                    <Grid item xs={12}>
-                        <Box style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", marginTop: '50px', marginBottom: '50px' }}>
-                            <TextField
-                                label="Enter Room ID"
-                                variant="filled"
-                                fullWidth={true}
-                                color="secondary"
-                                value={roomID}
-                                onChange={(e) => (onChange(e))} />
-                            <Button color="secondary" variant="contained" fullWidth={true} onClick={onClickJoin}>Join</Button>
-                        </Box>
-                    </Grid>
-                    {games}
-                </Grid>
-            </Container>
-        </>
-    );
-=======
       <Container maxWidth="lg">
         <Grid container spacing={2}>
           {/* Column1 - Form */}
@@ -110,5 +88,4 @@ export default function Welcome() {
       </Container>
     </>
   );
->>>>>>> 4aff99a... Style main game room, redirect to game after welcome page
 }
