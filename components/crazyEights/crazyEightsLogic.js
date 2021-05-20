@@ -34,6 +34,9 @@ const CrazyEightsLogic = () => {
     const [splicedStockPileCardObj, setSplicedStockPileCardObj] = useState({})
     console.log("playedCard:", playedCard)
 
+    const dealerPosition = players.indexOf(dealer)
+
+
     let numPlayers = players.length;
     //this will change depending on number of logged in users - dynamic??
     let loggedInUsersIndex = 1
@@ -78,12 +81,10 @@ const CrazyEightsLogic = () => {
         //Flatten the nested arrays
         var stockPileArr = [].concat.apply([], cardDeck.cards);
         setStockPile([...stockPileArr])
-
         // //Pick a random dealer
         setDealer(players[Math.floor(Math.random() * numPlayers)])
     }
 
-    const dealerPosition = players.indexOf(dealer)
 
     //set the first player once the dealer has been set
     useEffect(() => {
@@ -98,18 +99,12 @@ const CrazyEightsLogic = () => {
 
 
     function setTable() {
-
         //Pick the top card to be the first starter card
         let topCard = stockPile[0]
-
         // //Move the top ard from the stockpile to the discard pile
         setDiscardPile([...discardPile, topCard])
-
         // //Set the starting suit to that of the top card
         setCurrentSuit(topCard.suit)
-
-        //buffer function to allow loading - try to remove 
-        setReadyRender(true)
     }
 
 
@@ -123,9 +118,6 @@ const CrazyEightsLogic = () => {
         setPlayedCard(chosenCard)
         makeMove(currentPlayer, chosenCard)
     }
-
-
-    // LEFT OFF - THE PICKED UP CARD IS NOT REMOVED FROM THE PLAYERS HAND STRAIGHT AWAY, WORK ON SECOND CLICK TYHOUGH 
 
     // card must match number, or suit, or AN EIGHT, or draw from the pile and continue their turn. 
     const makeMove = (currentPlayer, playedCard) => {
@@ -230,8 +222,7 @@ const CrazyEightsLogic = () => {
         }
     }
 
-    //Set the main players array to have the extra card in hand when current player is updated
-
+    //Set the main players array to have the extra card in current players hand when current player is updated
     useEffect(() => {
         //Adding conditional so that this only runs once the playerSetValue is true
         if (playerSet && splicedStockPileCardObj) {
@@ -244,7 +235,6 @@ const CrazyEightsLogic = () => {
 
             //Make copy of players
             let playersCopy = [...players]
-            //get index of current hand
             //redefine the one object we want to update using bracket notatation for the index
             //Create copy of the the obj and then rewriting the value to change
 
@@ -252,7 +242,6 @@ const CrazyEightsLogic = () => {
 
             setPlayers(playersCopy)
             setPlayerSet(false)
-            // playersCopy[currentPlayerIndex].hand = [...currentPlayer.hand, splicedStockPileCardObj]
         }
 
     }, [playerSet])
@@ -296,95 +285,154 @@ const CrazyEightsLogic = () => {
 
     //Instigate the end of the game 
     const endOfRound = () => {
-        let scoreSum = 0
+        // let scoreSum = 0
         // If the current player has no cards left
         if (currentPlayer.hand.length === 0) {
             // Look at each of the players hands and calculate the total value
             const sum = () => {
                 for (var i = 0; i < players.length; i++) {
                     for (var j = 0; j < players[i].hand.length; j++) {
-                        scoreSum += players[i].hand[j].value
-                        console.log(scoreSum)
-
+                        currentPlayer.score += players[i].hand[j].value
+                        console.log("currentPlayer.score", currentPlayer.score)
                     }
                 }
             }
+            sum()
+            //Make copy of players
+            let playersCopy = [...players]
+            //redefine the one object we want to update using bracket notatation for the index
+            //Create copy of the the obj and then rewriting the value to change
+            playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], score: currentPlayer.score}
+
+            setPlayers(playersCopy)
             checkWinner()
 
         }
-        currentPlayer.score += scoreSum;
     }
+
+    const emptyHands = () => {
+        //Reset current players hands to empty
+        setCurrentPlayer((currentPlayer) => {
+            let temp = {
+                ...currentPlayer, //<-- shallow state copy
+                hand: [...currentPlayer.hand]
+            }
+
+            temp.hand = []
+            return temp
+        })
+
+        //Make copy of all players
+        let playersCopy = [...players]
+        //Create copy of the the obj and then rewriting the hands to empty
+
+        for (var i = 0; i < playersCopy.length; i++) {
+            playersCopy[i] = { ...playersCopy[i], hand: [] }
+            console.log(playersCopy[i]) //<< this empties the hands but it's not setting permanently
+        }
+
+        setPlayers(playersCopy)
+        console.log("code completed to change hand to empty ")
+        console.log(players)
+    }
+    console.log(players)
 
     // check to see if there's a winner
     const checkWinner = () => {
+        console.log("checking for a winner")
+        console.log(players[currentPlayerIndex].score)
         switch (players.length) {
             case 2:
-                if (currentPlayer.score >= 100) {
+                console.log("case 2 players was hit")
+                if (players[currentPlayerIndex].score >= 100) {
                     console.log(`Game over Player${currentPlayer.position} wins!`)
+                    emptyHands()
                 } else {
                     console.log(`Next Round`)
                     break
                 };
             case 3:
-                if (currentPlayer.score >= 150) {
+                if (players[currentPlayerIndex].score >= 150) {
                     console.log(`Game over Player ${currentPlayer.position} wins!`)
                 } else {
                     console.log(`Next Round`)
                     break
                 };
             case 4:
-                if (currentPlayer.score >= 200) {
+                if (players[currentPlayerIndex].score >= 200) {
                     console.log(`Game over ${currentPlayer} wins!`)
                 } else {
                     console.log(`Next Round`)
                     break
                 };
             case 5:
-                if (currentPlayer.score >= 250) {
+                if (players[currentPlayerIndex].score >= 250) {
                     console.log(`Game over Player${currentPlayer.position} wins!`)
                 } else {
                     console.log(`Next Round`)
                     break
                 };
             case 6:
-                if (currentPlayer.score >= 300) {
+                if (players[currentPlayerIndex].score >= 300) {
                     console.log(`Game over  Player${currentPlayer.position} wins!`)
                 } else {
                     console.log(`Next Round`)
                     break
                 };
             case 7:
-                if (currentPlayer.score >= 350) {
+                if (players[currentPlayerIndex].score >= 350) {
                     console.log(`Game over Player${currentPlayer.position} wins!`)
                 } else {
                     console.log(`Next Round`)
                     break
 
                 }
+                //RESET BOARD HERE ONCE WINNER IS DECLARED
         }
-        //Reset players hands to empty
+        emptyHands()
+        //Reset current players hands to empty
+        // setCurrentPlayer((currentPlayer) => {
+        //     let temp = {
+        //         ...currentPlayer, //<-- shallow state copy
+        //         hand: [...currentPlayer.hand]
+        //     }
 
-        console.log("start a new round with code here")
+        //     temp.hand = []
+        //     return temp
+        // })
+
+        // //Make copy of all players
+        // let playersCopy = [...players]
+        // //Create copy of the the obj and then rewriting the hands to empty
+
+        // for (var i = 0; i < playersCopy.length; i++) {
+        //     playersCopy[i] = { ...playersCopy[i], hand: [] }
+        //     console.log(playersCopy[i]) //<< this empties the hands but it's not setting permanently
+        // }
+
+        // setPlayers(playersCopy)
+        // console.log("code completed to change hand to empty ")
+        // console.log(players)
     }
 
+    console.log(players)
     console.log("current player hand after pick up:", currentPlayer)
-
 
     return (<>
         <div className="container">
             {currentPlayer && players.map(player => {
-                return <p key={player.position}>Player:{player.position} Score:{player.score}</p>
+                return <p key={player.position}>Player {player.position} Score: {player.score}</p>
             })}
             <button onClick={() => dealHands()}>1. Deal Cards</button>
             <button onClick={() => setTable()}>2. Set Table</button>
-            <h1>current suit: {currentSuit}</h1>
+            <h1>Current suit: {currentSuit}</h1>
             <p>Players hand:</p>
-            {currentPlayer && currentPlayer.hand.map(card => {
+            {players && currentPlayer && currentPlayer.hand.map(card => {
                 return (
                     <Card key={card.rank + card.suit} rank={card.rank} suit={card.suit} selectedCard={selectedCard} value={card.value} />)
             })}
             <p>Other Players Hands:</p>
-            {currentPlayer && players.map(player => player.hand.map(card => {
+            {players && currentPlayer && players.map(player => player.hand.map(card => {
                 return (
                     <Card key={card.rank + card.suit} rank={card.rank} suit={card.suit} selectedCard={selectedCard} value={card.value} />
                 )
