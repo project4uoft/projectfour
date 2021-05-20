@@ -23,9 +23,6 @@ export default function Welcome() {
     router.push(`/rooms/${roomId}?game=${game}`);
   };
 
-  const onClickJoin = (e) => {
-    router.push(`/rooms/${roomID}`);
-  };
   let games = data.map((game) => {
     return (
       <Grid item xs={12} sm={6} md={3} lg={3} key={game.id}>

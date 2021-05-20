@@ -20,7 +20,7 @@ const END_EVENT = "endBullShit";
 export default withPageAuthRequired(function Home() {
   const router = useRouter();
   const { user, error, isLoading } = useUser();
-  const { roomId } = router.query; // Gets roomId from URL
+  const { roomId, gameTitle } = router.query; // Gets roomId from URL
   const playerName = user.nickname;
   const socketRef = useRef();
   const [gameBoard, setGameBoard] = useState(null);
@@ -34,7 +34,7 @@ export default withPageAuthRequired(function Home() {
       roomId: roomId,
       game: game,
     });
-    console.log(game)
+    console.log(game);
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export default withPageAuthRequired(function Home() {
 
     // If game started send game event to socket.io with game info
     socketRef.current.on(CREATE_GAME_EVENT, ({ board }) => {
-      console.log(board)
+      console.log(board);
       setPlayer(
         board.players.filter((player) => player.playerName === playerName)[0]
       );
