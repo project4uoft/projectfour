@@ -1,4 +1,7 @@
 import Card from "./Card";
+import YellAlert from "./YellAlert";
+import FlippedCard from "./FlippedCard";
+import OtherPlayer from './OtherPlayer';
 
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -7,12 +10,51 @@ const SOCKET_SERVER_URL = "http://localhost:3000";
 const PLAY_EVENT_BULLSHIT = "playMoveBullShit";
 const CALL_BULLSHIT = "callBullShit";
 const PASS_BULLSHIT = "passBullShit";
+const END_TURN_BULLSHIT = "endTurnBullShit";
+
+import {Typography, Box, Button, Grid, Checkbox} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(() => ({
+  boxBS: {
+    position: 'relative'
+  },
+  discardPile: {
+    marginTop:'20px',
+    marginBottom:'20px',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  playerHand: {
+    display: 'flex'
+  },
+  checkBtn: {
+    display:'none'
+  },
+  label:{
+    cursor: 'pointer'
+  }
+}));
 
 const BullShitPanel = ({ gameBoard, player }) => {
+  const classes = useStyles();
   const [numSelected, setNumSelected] = useState([]);
+  const [alert, setAlert] = useState(false)
+  
+  const [topMessage, setTopMessage] = useState(null)
+  const [bottomMessage, setBottomMessage] = useState(null)
+  const [pass, setPass] = useState(false)
+  const [bluffing, setBluffing] = useState(false)
+
+  
+  let playerIndex = gameBoard.players.indexOf(player);
+  const playerOrder = [];
+  for(let i = 1; i < gameBoard.players.length; i++){
+    playerOrder.push((playerIndex + i)%gameBoard.players.length)
+  }
 
   const router = useRouter();
-  const { roomId, playerName } = router.query; // Gets roomId from URL
+  const { roomId } = router.query; // Gets roomId from URL
 
   const socketRef = useRef();
   socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
@@ -20,7 +62,6 @@ const BullShitPanel = ({ gameBoard, player }) => {
   });
 
   const handleCheck = (event) => {
-    console.log(numSelected);
     let isSelected = event.currentTarget.checked;
     if (isSelected) {
       if (numSelected.length < 4) {
@@ -61,75 +102,209 @@ const BullShitPanel = ({ gameBoard, player }) => {
 
   const handleNo = (event) => {
     event.preventDefault();
-
     socketRef.current.emit(PASS_BULLSHIT, {
       roomId: roomId,
       playerName: player.playerName,
     });
+    setPass(true);
   };
 
+  useEffect(() =>{
+    let timer;
+    
+    setBluffing(false)
+    if(!gameBoard.bluffPhase) {
+      if(gameBoard.players[gameBoard.currentPlayerPos].playerName ===
+        player.playerName){
+          setTopMessage('It is your turn!');
+        }
+      else{
+        setTopMessage(`It is ${gameBoard.players[gameBoard.currentPlayerPos].playerName}'s turn!`);
+      }
+      setBottomMessage(null);
+      setPass(false)
+    }
+    else{
+      if(gameBoard.bluff === 'null'){
+        setBluffing(false)
+        if(gameBoard.players[gameBoard.currentPlayerPos].playerName ===
+          player.playerName){
+            setTopMessage(`You played ${gameBoard.lastCallAmount} cards`);
+            setBottomMessage(<div>Seeing if anyone believes you!</div>)
+          }
+        else{
+          setTopMessage(`${gameBoard.players[gameBoard.currentPlayerPos].playerName} played ${gameBoard.lastCallAmount} cards`);
+          if(!pass){
+            setBottomMessage(<div>
+              Would you like to call{" "}
+              {gameBoard.players[gameBoard.currentPlayerPos].playerName}{" "}
+              bluff? <br />
+              <Button
+              
+                variant="contained" 
+                color="primary"
+                className="buttonBluff"
+                onClick={handleYes}
+              >
+                Yes
+              </Button>
+              <Button
+              
+                variant="contained" 
+                color="primary"
+                className="buttonBluff"
+                onClick={handleNo}
+              >
+                No
+              </Button>
+            </div>)
+          }
+          else{
+            setBottomMessage(<div>Waiting for other players to decide.</div>)
+          }
+        }
+      }
+      else if(gameBoard.bluff === 'pass'){
+        setBluffing(false)
+        if(gameBoard.players[gameBoard.currentPlayerPos].playerName ===
+          player.playerName){
+            setBottomMessage(<div>Everyone believed you.</div>)
+          }
+        else{
+          setBottomMessage(<div>Everyone believed {gameBoard.players[gameBoard.currentPlayerPos].playerName}</div>)
+        }
+        timer = setTimeout(()=>{
+          socketRef.current.emit(END_TURN_BULLSHIT, {
+            roomId: roomId,
+          });
+        }, 2000);
+      }
+      else if(gameBoard.bluff === 'truth' || gameBoard.bluff === 'bluff'){
+        setAlert(true);
+        timer = setTimeout(()=>{
+          setAlert(false);
+        }, 2000);
+        setBluffing(true)
+        if(gameBoard.bluff === 'truth'){
+          if(gameBoard.players[gameBoard.currentPlayerPos].playerName ===
+            player.playerName){
+              setTopMessage(`${gameBoard.playerWhoCalledBluff.playerName} called you bluff.`)
+              setBottomMessage(<div>Thank goodness you were telling the truth!</div>)
+          }
+          else if(gameBoard.playerWhoCalledBluff.playerName === player.playerName){
+            setTopMessage(`You called ${gameBoard.players[gameBoard.currentPlayerPos].playerName} bluff.`)
+            setBottomMessage(<div>Uh oh, it looks like {gameBoard.players[gameBoard.currentPlayerPos].playerName} was telling the truth!</div>)
+          }
+          else{
+            setTopMessage(`${gameBoard.playerWhoCalledBluff.playerName} called ${gameBoard.players[gameBoard.currentPlayerPos].playerName} bluff.`)
+            setBottomMessage(<div>It looks like {gameBoard.players[gameBoard.currentPlayerPos].playerName} was telling the truth!</div>)
+          }
+        }
+        else{
+          if(gameBoard.players[gameBoard.currentPlayerPos].playerName ===
+            player.playerName){
+              setTopMessage(`${gameBoard.playerWhoCalledBluff.playerName} called you bluff.`)
+              setBottomMessage(<div>Oh no, you got caught!</div>)
+          }
+          else if(gameBoard.playerWhoCalledBluff.playerName === player.playerName){
+            setTopMessage(`You called ${gameBoard.players[gameBoard.currentPlayerPos].playerName} bluff.`)
+            setBottomMessage(<div>And you caught {gameBoard.players[gameBoard.currentPlayerPos].playerName} lying!</div>)
+          }
+          else{
+            setTopMessage(`${gameBoard.playerWhoCalledBluff.playerName} called ${gameBoard.players[gameBoard.currentPlayerPos].playerName} bluff.`)
+            setBottomMessage(<div>It looks like {gameBoard.players[gameBoard.currentPlayerPos].playerName} was caught lying!</div>)
+          }
+        }
+        console.log('bluffing', bluffing)
+        timer = setTimeout(()=>{
+          socketRef.current.emit(END_TURN_BULLSHIT, {
+            roomId: roomId,
+          });
+        }, 5000);
+      }
+    }
+  },[gameBoard.bluff, gameBoard.bluffPhase, pass])
+
   return (
-    <div className="container mx-auto">
-      <div className="text-center">
-        <h1 className="mb-3 text-2xl font-bold">BullShit</h1>
-        <h2>Discard pile: {gameBoard.discardPile.length}</h2>
-        {gameBoard.players
-          .filter((p) => p.playerName !== player.playerName)
-          .map((p, i) => (
-            <div key={i}>
-              Player: {p.playerName} | Cards Left: {p.playerCards.length}
-            </div>
-          ))}
-        <h2>Current call: {gameBoard.ranks[gameBoard.currentCall]}</h2>
-        {gameBoard.bluffPhase ? (
-          <h2>
-            {gameBoard.players[gameBoard.currentPlayerPos].playerName} played{" "}
-            {gameBoard.lastCallAmount} cards.
-            {gameBoard.players[gameBoard.currentPlayerPos].playerName ==
-            player.playerName ? (
-              <div>Seeing if anyone believes you!</div>
-            ) : player.playerCards.length === 0 ? null : (
-              <div>
-                Would you like to call{" "}
-                {gameBoard.players[gameBoard.currentPlayerPos].playerName}{" "}
-                bluff? <br />
-                <button
-                  className="px-2 py-1 mx-2 text-blue-700 bg-transparent border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent"
-                  onClick={handleYes}
-                >
-                  Yes
-                </button>
-                <button
-                  className="px-2 py-1 mx-2 text-red-500 bg-transparent border border-red-500 rounded hover:bg-red-500 hover:text-white hover:border-transparent"
-                  onClick={handleNo}
-                >
-                  No
-                </button>
-              </div>
-            )}
-          </h2>
-        ) : (
-          <h2>
-            It is{" "}
-            {gameBoard.players[gameBoard.currentPlayerPos].playerName ===
-            player.playerName ? (
-              <span>your turn</span>
-            ) : (
-              <span>
-                {gameBoard.players[gameBoard.currentPlayerPos].playerName}'s
-                turn
-              </span>
-            )}
-          </h2>
-        )}
-      </div>
+    <Box className={classes.boxBS}>
+      <Typography align="center">
+        <Typography variant="h3">
+          BullShit
+        </Typography>
+
+        <Typography variant="h4">
+        Current call: {gameBoard.ranks[gameBoard.currentCall]}
+
+        </Typography>
+
+        <Typography variant="h4">
+        {topMessage}
+        </Typography>
+
+        <OtherPlayer players={playerOrder.map(index => gameBoard.players[index])
+        } />
+
+        <Grid container spacing={3}>
+          <Grid item xs={6} className={classes.discardPile}>
+            
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Typography variant="h5">
+                  Discard pile
+                </Typography>
+              </Grid>
+            
+              <Grid item xs={12}>
+                <Box display="flex" justifyContent='center'>
+                  {(!bluffing) ? <FlippedCard text={gameBoard.discardPile.length - gameBoard.lastPlayedHand.length}/> : <FlippedCard text={gameBoard.discardPile.length}/>}
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={6}  className={classes.discardPile}>
+          <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Typography variant="h5">
+                  Current Play
+                </Typography>
+              </Grid>
+            
+              <Grid item xs={12}>
+                  {!bluffing ?
+                    <Box display="flex" justifyContent='center'>
+                      {gameBoard.lastPlayedHand.map((card, index) => (
+                      <FlippedCard key={`card-flipped-${index}`} text=""/>
+                      ))}
+                    </Box>
+                    :
+                    <Box display="flex" justifyContent='center'>
+                      {gameBoard.lastPlayedHand.map((card, index) => (
+                        <Card key={`card-played-${index}`} rank={card.rank} suit={card.suit} checked={false}/>
+                      ))}
+                    </Box>
+                  }
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+      </Typography>
+
+      <Typography variant="h4">
+        {bottomMessage}
+      </Typography>
+
       <form onSubmit={handleSubmit}>
-        <div className="flex flex-wrap justify-center max-w-5xl mx-auto mt-1">
+        <Box 
+          className={classes.playerHand}
+          display="flex"
+          flexWrap="wrap"
+        >
           {player.playerCards.map((card, index) => (
-            <label key={index}>
+            <div key={index}>
               <input
-                key={`${card.rank}${card.suit}`}
                 type="checkbox"
+                key={`${card.rank}${card.suit}`}
                 disabled={
                   !(
                     !gameBoard.bluffPhase &&
@@ -139,14 +314,19 @@ const BullShitPanel = ({ gameBoard, player }) => {
                 }
                 onChange={handleCheck}
                 value={index}
+                id={`your-card-${index}`}
+                className={classes.checkBtn}
               />
-              <Card rank={card.rank} suit={card.suit} />
+            <label for={`your-card-${index}`} className={classes.label}>
+              <Card rank={card.rank} suit={card.suit} checked={numSelected.includes(index)}/>
             </label>
+            </div>
           ))}
-        </div>
+        </Box>
 
-        <button
-          className="flex px-4 py-2 mx-auto mt-1 font-semibold text-blue-700 bg-transparent border border-blue-500 rounded hover:bg-blue-500 hover:text-white hover:border-transparent"
+        <Button 
+          variant="contained" 
+          color="primary"
           type="submit"
           disabled={
             !(
@@ -157,9 +337,10 @@ const BullShitPanel = ({ gameBoard, player }) => {
           }
         >
           Play
-        </button>
+        </Button>
       </form>
-    </div>
+      {alert && <YellAlert />}
+    </Box>
   );
 };
 

@@ -43,7 +43,7 @@ export default function Welcome() {
     }
 
     const onClickJoin = (e) => {
-        router.push(`/rooms/${roomID}/${user.nickname}`);
+        router.push(`/rooms/${roomID}`);
     }
 
 

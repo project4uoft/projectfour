@@ -1,8 +1,8 @@
 // after user is logged in he gets redirected to this game room page
-import SidePanel from "../../../../components/gameroom/side-panel/SidePanel";
-import MainPanel from "../../../../components/gameroom/main-panel/MainPanel.js";
-import Meta from "../../../../components/Meta";
-import Navbar from "../../../../components/Navbar";
+import SidePanel from "../../../components/gameroom/side-panel/SidePanel";
+import MainPanel from "../../../components/gameroom/main-panel/MainPanel.js";
+import Meta from "../../../components/Meta";
+import Navbar from "../../../components/Navbar";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
@@ -20,14 +20,15 @@ const END_EVENT = "endBullShit";
 export default withPageAuthRequired(function Home() {
   const router = useRouter();
   const { user, error, isLoading } = useUser();
-  const { roomId, playerName } = router.query; // Gets roomId from URL
-  console.log(roomId, playerName);
+  const { roomId } = router.query; // Gets roomId from URL
+  const playerName = user.nickname;
   const socketRef = useRef();
+  
 
   const [gameBoard, setGameBoard] = useState(null);
-  const [gameTitle, setGameTitle] = useState(null);
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
+  const [refresh, setRefresh] = useState(true)
 
   // Emmit new game event to socket.io when game button clicked in side menu
   const handleClick = (game) => {
@@ -35,6 +36,7 @@ export default withPageAuthRequired(function Home() {
       roomId: roomId,
       game: game,
     });
+    console.log(game)
   };
 
   useEffect(() => {
@@ -44,21 +46,24 @@ export default withPageAuthRequired(function Home() {
     });
 
     // Listens for incoming messages
-    if (roomId !== undefined) {
-      socketRef.current.emit(NEW_PLAYER_JOINED, {
-        roomId: roomId,
-        playerName: playerName,
-      });
+    if(refresh){
+      if (roomId !== undefined) {
+        socketRef.current.emit(NEW_PLAYER_JOINED, {
+          roomId: roomId,
+          playerName: playerName,
+        });
+      }
+      setRefresh(false)
     }
+    
 
     // If game started send game event to socket.io with game info
-    socketRef.current.on(CREATE_GAME_EVENT, ({ game, board }) => {
-      console.log(`we're playing ${game}`);
+    socketRef.current.on(CREATE_GAME_EVENT, ({ board }) => {
+      console.log(board)
       setPlayer(
         board.players.filter((player) => player.playerName === playerName)[0]
       );
       setGameBoard(board);
-      setGameTitle(game);
       setWinners(false);
     });
 
@@ -70,8 +75,6 @@ export default withPageAuthRequired(function Home() {
 
     // send game update events as game progress
     socketRef.current.on(UPDATE_GAME_EVENT, ({ board }) => {
-      console.log(`updating game`);
-      console.log(board);
       setPlayer(
         board.players.filter((player) => player.playerName === playerName)[0]
       );
@@ -89,6 +92,7 @@ export default withPageAuthRequired(function Home() {
   if (error) return <div>{error.message}</div>;
   // display page content only if user is logged in
   if (user) {
+    console.log(gameBoard, roomId, player)
     return (
       <>
         <Meta title="Game Room" />
@@ -97,12 +101,10 @@ export default withPageAuthRequired(function Home() {
           <SidePanel handleClick={handleClick} />
           <MainPanel
             roomId={roomId}
-            gameTitle={gameTitle}
             player={player}
             gameBoard={gameBoard}
             winners={winners}
             players={gameBoard ? gameBoard.players : []}
-            game={gameTitle}
           />
         </div>
       </>

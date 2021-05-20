@@ -88,20 +88,17 @@ function WelcomeCard({ name, image, description }) {
                             </Typography>
                         </div>
                     </Grid>
-
-                    <div className={styles.buttonCenter}>
-                        <Grid item xs={12}>
-                            <Button 
-                                variant="contained" color="primary"
-                                onClick={() => {
-                                    const roomId = uuid();
-                                    router.push(`/rooms/${roomId}/${user.nickname}`);
-                                }}
-                            >
-                                Play in Private Room
-                            </Button>
-                        </Grid>
-                    </div>
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained" color="primary"
+                            onClick={() => {
+                                const roomId = uuid();
+                                router.push(`/rooms/${roomId}`);
+                            }}
+                        >
+                            Play in Private Room
+                        </Button>
+                    </Grid>
                 </Grid>
             </div>
         </motion.div>
