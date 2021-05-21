@@ -1,6 +1,6 @@
 import Layout from "../components/Layout";
 // import "../styles/globals.css";
-import 'tailwindcss/tailwind.css'
+// import 'tailwindcss/tailwind.css'
 import { UserProvider } from '@auth0/nextjs-auth0';
 
 
