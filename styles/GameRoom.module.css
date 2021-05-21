@@ -1,5 +1,5 @@
 .sidePanelButton {
-  display: inline-block;
+  display: flex;
   padding: 0.5em 3em;
   border: 0.16em solid #2674da;
   margin: 0 0.3em 0.3em 0;
@@ -8,15 +8,15 @@
   text-transform: uppercase;
   font-family: "Roboto", sans-serif;
   font-weight: 400;
-  color: #2674da;
-  text-align: center;
+  color: #fff;
   transition: all 0.15s;
   cursor: pointer;
+  align-items: center;
 }
 
 .sidePanelButton:hover {
   color: #ffffff;
-  border-color: rgb(126, 147, 241);
+  border-color: rgb(206, 215, 255);
 }
 .sidePanelButton:active {
   color: #bbbbbb;

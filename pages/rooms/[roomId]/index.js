@@ -20,11 +20,9 @@ const END_EVENT = "endBullShit";
 export default withPageAuthRequired(function Home() {
   const router = useRouter();
   const { user, error, isLoading } = useUser();
-  const { roomId } = router.query; // Gets roomId from URL
+  const { roomId, gameTitle } = router.query; // Gets roomId from URL
   const playerName = user.nickname;
   const socketRef = useRef();
-  
-
   const [gameBoard, setGameBoard] = useState(null);
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
@@ -36,7 +34,7 @@ export default withPageAuthRequired(function Home() {
       roomId: roomId,
       game: game,
     });
-    console.log(game)
+    console.log(game);
   };
 
   useEffect(() => {
@@ -59,7 +57,7 @@ export default withPageAuthRequired(function Home() {
 
     // If game started send game event to socket.io with game info
     socketRef.current.on(CREATE_GAME_EVENT, ({ board }) => {
-      console.log(board)
+      console.log(board);
       setPlayer(
         board.players.filter((player) => player.playerName === playerName)[0]
       );
@@ -88,6 +86,13 @@ export default withPageAuthRequired(function Home() {
     };
   }, [gameBoard, roomId, player]);
 
+  useEffect(() => {
+    if (router.query.game) {
+      const game = router.query.game.toLowerCase();
+      handleClick(game);
+    }
+  }, []);
+
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
   // display page content only if user is logged in
@@ -97,8 +102,8 @@ export default withPageAuthRequired(function Home() {
       <>
         <Meta title="Game Room" />
         <Navbar />
-        <div className="flex flex-row flex-auto h-screen">
-          <SidePanel handleClick={handleClick} />
+        <div style={{ display: "flex" }}>
+          <SidePanel gameTitle={gameTitle} handleClick={handleClick} />
           <MainPanel
             roomId={roomId}
             player={player}
