@@ -13,10 +13,11 @@
 }
 
 .myMessage {
-  max-width: 255px;
+  width: 60% !important;
   word-wrap: break-word;
   margin-bottom: 12px;
-  margin-right: 5px;
+  margin-right: auto;
+  margin-left: 15px;
   line-height: 20px;
   position: relative;
   padding: 6px 15px;
@@ -25,7 +26,7 @@
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   color: white;
   background: #0b93f6;
-  align-self: flex-end;
+  float: right !important;
 }
 
 .myMessage::before {
@@ -51,7 +52,7 @@
 }
 
 .receivedMessage {
-  max-width: 255px;
+  width: 60% !important;
   word-wrap: break-word;
   margin-bottom: 12px;
   line-height: 20px;

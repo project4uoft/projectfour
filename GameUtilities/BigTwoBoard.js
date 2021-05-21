@@ -9,8 +9,10 @@ class BigTwoBoard {
     this.lastPlayer = '';
     this.currentPlayer = '';
     this.firstMove = true; // check for player with lowest card
-    this.winner = '';
+    this.winner = [];
     this.numPass = 0;
+    this.playerPassed = false;
+    this.title = 'bigtwo';
   }
 
   newGame(players){
@@ -34,25 +36,39 @@ class BigTwoBoard {
   }
 
   // check to see if the hand played is valid
-  checkValidMove(player, hand) {
+  checkValidMove(player, cardIndices) {
     if(this.firstMove){
-      if(!hand.includes(player.playerCards[0])) return false;
+      // if(!hand.includes(player.playerCards[0])) return false;
+      if(!cardIndices.includes[0])
       this.firstMove = false;
     }
-    return checkValidHand(this.lastPlayedHand, hand)
+    let tempHand = []
+    for(let i = 0; i < cardIndices.length; i++){
+      tempHand.push(player.playerCards[cardIndices[i]]);
+    }
+    return checkValidHand(this.lastPlayedHand, tempHand)
   }
 
-  playMove(player, hand){
-    hand.forEach(card => {
-      player.playerCards.splice(player.playerCards.indexOf(card),1);
-    })
-    this.lastPlayedHand = hand;
+  playMove(player, cardIndices){
+    this.playerPassed = false;
+    this.firstMove = false;
+    let tempHand = [];
+    this.numPass = 0;
+    for(let i = 0; i < cardIndices.length; i++){
+      tempHand.push(player.playerCards[cardIndices[i]]);
+    }
+    //remove cards from player hands
+    player.playerCards = player.playerCards.filter((value,index) => !cardIndices.includes(index));
+    // hand.forEach(card => {
+    //   player.playerCards.splice(player.playerCards.indexOf(card),1);
+    // })
+    // this.lastPlayedHand = hand;
     if(this.currentPlayer.playerCards.length === 0) {
-      this.winner = this.currentPlayer;
-      return true;
+      this.winner.push(this.currentPlayer);
+      return this.winner;
     }
     else{
-      this.lastPlayedHand = newHand;
+      this.lastPlayedHand = tempHand;
       this.lastPlayer = this.currentPlayer;
       this.currentPlayer = this.players[(this.players.indexOf(this.currentPlayer) + 1) % this.players.length] 
     }
@@ -61,12 +77,15 @@ class BigTwoBoard {
 
   pass(){
     this.numPass++;
+    this.playerPassed = this.currentPlayer;
     if(this.numPass === this.players.length-1){
       this.currentPlayer = this.lastPlayer;
       this.lastPlayedHand = [];
       this.numPass = 0;
     }
-    this.currentPlayer = this.players[(this.players.indexOf(this.currentPlayer) + 1) % this.players.length] 
+    else{
+      this.currentPlayer = this.players[(this.players.indexOf(this.currentPlayer) + 1) % this.players.length] 
+    }
   }
 
   getCurrentPlayer() {

@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Big Two",
+        "image": "/assets/images/welcome/BigTwo.png",
+        "description": "Is a card game of Chinese origin. It is usually played with two to four players, the entire deck being dealt out in either case (or sometimes with only 13 cards per player, if there are fewer than four players). The objective of the game is to be the first to play of all of one's cards."
+    },
+    {
+        "id": 2,
+        "name": "Tic Tac Toe",
+        "image": "/assets/images/welcome/Tictactoe.png",
+        "description": "Is a paper-and-pencil game for two players, X and O, who take turns marking the spaces in a 3×3 grid. The player who succeeds in placing three of their marks in a diagonal, horizontal, or vertical row is the winner. It is a solved game with a forced draw assuming best play from both players."
+    },
+    {
+        "id": 3,
+        "name": "Bullshit",
+        "image": "/assets/images/welcome/Bullshit.png",
+        "description": "Bullshit a card game where the players aim to get rid of all of their cards. It is a game of deception, with cards being played face-down and players being permitted to lie about the cards they have played. A challenge is usually made by players calling out the name of the game, and the loser of a challenge has to pick up every card played so far."
+    },
+    {
+        "id": 4,
+        "name": "Mafia",
+        "image": "/assets/images/welcome/Mafia.png",
+        "description": "The Mafia game models a conflict between two groups: an informed minority (the mafiosi), and an uninformed majority (the villagers). At the start of the game, each player is secretly assigned a role affiliated with one of these teams."
+    }
+]
