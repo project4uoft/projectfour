@@ -36,8 +36,8 @@ const Ranked = () => {
                 height={'100%'}
                 margin={5}
             />
-            <Typography align = 'center'>{game} <p>{rank}</p>
-            </Typography>
+            <p align = 'center'>{game} <span>{rank}</span>
+            </p>
             
         </div>
     )

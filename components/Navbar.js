@@ -34,7 +34,6 @@ export default function Navbar({ fixed }) {
   const { roomId } = router.query; // Gets roomId from URL
   const classes = useStyles();
 
-  console.log(user)
 
   console.log(window.location.href)
   const profileBtn = () => {

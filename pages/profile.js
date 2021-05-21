@@ -56,22 +56,28 @@ export default withPageAuthRequired(function Profile() {
         return (
             <>
                 <Meta title="Game Room" />
+
                 <Navbar profile={profile} />
+
                 <div className={classes.cardContainer}>
+
                     <UserBox user={user} />
+
                     <div className={classes.middleContainer}>
+
                         <LastPlayed
                             score={"4/7"}
                             game={'Tic-Tac-Toe'}
                         />
-                        <div>
 
-                            <Typography className={classes.ranked}>Ranked
-            </Typography>
+                        <div>
+                            <p className={classes.ranked}>Ranked </p>
                             <Ranked />
                             <Ranked />
                         </div>
+
                     </div>
+
                     <Achievements />
                 </div>
             </>

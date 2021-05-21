@@ -6,7 +6,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import ExitToApp from "@material-ui/icons/ExitToApp";
+import {ExitToApp, Face} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -27,6 +27,16 @@ export default function Navbar({ fixed }) {
   const router = useRouter();
   const { roomId, playerName } = router.query; // Gets roomId from URL
   const classes = useStyles();
+
+  const profileBtn = () => {
+    if (router.pathname === "/profile"){
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
   return (
     <>
       <div className={classes.root}>
@@ -44,6 +54,17 @@ export default function Navbar({ fixed }) {
             <Typography variant="h6" className={classes.title}>
               Party House
             </Typography>
+            <Button
+            variant="contained"
+            color="primary"
+            href="/profile"
+            disabled={profileBtn()}
+            className={classes.button}
+            endIcon={<Face />}
+            style={{ marginRight: "3em" }}
+          >
+            Profile
+        </Button>
             <Button
               variant="contained"
               color="primary"
