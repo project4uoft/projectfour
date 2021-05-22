@@ -58,7 +58,7 @@ export default function Navbar({ fixed }) {
                   width={40}
                   height={40}
                   margin={5}
-                  href="/"
+                  href="/welcome"
 
                 />
               </a>

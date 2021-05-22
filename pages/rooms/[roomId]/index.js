@@ -8,6 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 
+// import { useHistory, useLocation } from 'react-router-dom'
+//Import api routes to db
+import API from '../../../utils/API';
+
+
 const NEW_PLAYER_JOINED = "newPlayerJoin"; // Name of the event
 const NEW_GAME_EVENT = "newGame"; // Name of the event
 const SOCKET_SERVER_URL = "http://localhost:3000";
@@ -18,16 +23,23 @@ const END_EVENT = "endBullShit";
 // functional component is wrapped in withPageAuthRequired method from auth0 to protect route
 // if user is not signed in - he will be redirected to login page
 export default withPageAuthRequired(function Home() {
+
+
   const router = useRouter();
   const { user, error, isLoading } = useUser();
   const { roomId, gameTitle } = router.query; // Gets roomId from URL
   const playerName = user.nickname;
+  const playerEmail = user.name;
   const socketRef = useRef();
   const [gameBoard, setGameBoard] = useState(null);
+  const [game, setGame] = useState(null);
   const [player, setPlayer] = useState(null);
   const [winners, setWinners] = useState(false);
   const [refresh, setRefresh] = useState(true)
 
+  
+  
+  
   // Emmit new game event to socket.io when game button clicked in side menu
   const handleClick = (game) => {
     socketRef.current.emit(NEW_GAME_EVENT, {
@@ -35,8 +47,18 @@ export default withPageAuthRequired(function Home() {
       game: game,
     });
     console.log(game);
+    setGame(game);
   };
 
+const saveGame = () => {
+  API.saveUser({
+    postedBy: playerEmail,
+    created_at: dateNow(),
+    game: game, 
+    outcome:outcome
+  });
+}
+  
   useEffect(() => {
     // Creates a WebSocket connection
     socketRef.current = socketIOClient(SOCKET_SERVER_URL, {
@@ -69,6 +91,7 @@ export default withPageAuthRequired(function Home() {
     socketRef.current.on(END_EVENT, ({ winners }) => {
       console.log(`the winners are ${winners}`);
       setWinners(winners);
+      saveGame();
     });
 
     // send game update events as game progress
@@ -116,3 +139,4 @@ export default withPageAuthRequired(function Home() {
     );
   }
 });
+

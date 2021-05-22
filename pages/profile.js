@@ -39,11 +39,14 @@ const useStyles = makeStyles((theme) =>
             width: '100%',
             fontSize: '2em',
             margin: '0',
-            textShadow: ['white 1px 1px 2px','black 10px 10px 20px']
+            textShadow: ['white 1px 1px 2px', 'black 10px 10px 20px']
         }
     }))
 
 export default withPageAuthRequired(function Profile() {
+
+
+
     const { user, error, isLoading } = useUser()
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>{error.message}</div>
@@ -54,9 +57,10 @@ export default withPageAuthRequired(function Profile() {
         const profile = true;
 
 
+
         return (
             <>
-                <Meta title="Game Room" />
+                <Meta title= {`${user.nickname}'s profile`} />
 
                 <Navbar profile={profile} />
 

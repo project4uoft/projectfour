@@ -1,4 +1,5 @@
 const express = require("express");
+
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
@@ -12,6 +13,9 @@ const dev = process.env.NODE_ENV !== "production";
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 const PORT = process.env.PORT || 3000;
+
+const mongoose = require("mongoose");
+
 const NEW_CHAT_MESSAGE_EVENT = "newChatMessage";
 
 const Player = require("./GameUtilities/Player");
@@ -33,6 +37,20 @@ const PLAY_EVENT_BIGTWO = "playMoveBigTwo";
 const PASS_BIGTWO = "passBigTwo";
 
 const rooms = [];
+
+// Routes
+const routes = require("./routes");
+app.use(routes);
+
+// How to connect locally "mongodb://localhost/YOUR DATA BASE NAME"
+mongoose.connect(
+  process.env.MONGODB_URI || 'mongodb://localhost/P4DB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+}
+);
 
 io.on("connection", (socket) => {
   // Join a conversation

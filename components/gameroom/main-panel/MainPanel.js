@@ -22,6 +22,9 @@ const MainPanel = ({
   game,
 }) => {
   console.log("gameboard: ", gameBoard);
+
+
+
   const classes = useStyles();
   return (
     <>
@@ -46,3 +49,5 @@ const MainPanel = ({
 };
 
 export default MainPanel;
+
+
