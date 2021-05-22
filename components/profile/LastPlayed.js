@@ -9,28 +9,33 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles({
     root: {
+        width: '100%',
+        justifyContent:'center'
+    },
+    box: {
         height: '70%',
         zIndex: '1',
-        maxWidth: '80%',
+        maxWidth: '70%',
         display: 'grid',
+        margin:'auto',
         gridTemplateRows: '1fr 3fr',
         color: 'white',
         backgroundColor: '#3f51b5',
         border: '3px solid #3f51b5',
         boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
         borderRadius: '30%',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     info: {
-        height: '90%',
+        height: '80%',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         color: 'white',
         textAlign: 'center'
     },
     scoreBox: {
-        width: '70%',
-        marginLeft: '20%',
+        width: '80%',
+        marginLeft: '10%',
         border: '3px solid #3f51b5',
         boxShadow: 'white 0px 3px 5px',
         borderRadius: '30%',
@@ -39,12 +44,15 @@ const useStyles = makeStyles({
     },
     title: {
         backgroundColor: 'none',
-        fontSize: '1.2em'
-    },
-    spanScore:{
-        fontSize:'25px',
-        paddingBottom: '10%',
+        fontSize: '1.5em',
+        marginTop: 6,
+        marginBottom: 4
 
+    },
+    spanScore: {
+        fontSize: '30px',
+        paddingBottom: '5%',
+        marginBottom: 5
     }
 });
 
@@ -65,6 +73,7 @@ function LastPlayed({ game, score, title }) {
 
     return (
         <div className={classes.root}>
+            <div className={classes.box}>
             <div>
                 <h3 className={classes.title}>Last Game Played</h3>
             </div>
@@ -82,11 +91,12 @@ function LastPlayed({ game, score, title }) {
                     </Typography>
                 </div>
                 <div className={classes.scoreBox}>
-                    <p>{score}</p>
-                    <span className = {classes.spanScore}>
+                    <p className={classes.spanScore}>{score}</p>
+                    <span >
                         {(parseInt(score) > 0.5) ? `You Won!` : `You Lost!`}
                     </span>
                 </div>
+            </div>
             </div>
         </div>
     )

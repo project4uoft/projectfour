@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) =>
             display: 'block',
             width: '100%',
             fontSize: '2em',
+            margin: '0',
             textShadow: ['white 1px 1px 2px','black 10px 10px 20px']
         }
     }))

@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) =>
             fontSize: '30px',
             backgroundColor: 'black'
         },
+        rank: {
+            margin: 0
+        }
     }))
 
 const Ranked = () => {
@@ -36,7 +39,7 @@ const Ranked = () => {
                 height={'100%'}
                 margin={5}
             />
-            <p align = 'center'>{game} <span>{rank}</span>
+            <p className={classes.rank} align = 'center'>{game} <span>{rank}</span>
             </p>
             
         </div>
