@@ -50,14 +50,14 @@ export default withPageAuthRequired(function Home() {
     setGame(game);
   };
 
-const saveGame = () => {
-  API.saveUser({
-    postedBy: playerEmail,
-    created_at: dateNow(),
-    game: game, 
-    outcome:outcome
-  });
-}
+// const saveGame = () => {
+//   API.saveUser({
+//     postedBy: playerEmail,
+//     created_at: dateNow(),
+//     game: game, 
+//     outcome:outcome
+//   });
+// }
   
   useEffect(() => {
     // Creates a WebSocket connection
@@ -91,7 +91,7 @@ const saveGame = () => {
     socketRef.current.on(END_EVENT, ({ winners }) => {
       console.log(`the winners are ${winners}`);
       setWinners(winners);
-      saveGame();
+      // saveGame();
     });
 
     // send game update events as game progress
