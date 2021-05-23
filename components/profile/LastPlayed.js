@@ -100,6 +100,7 @@ function LastPlayed({ created_at, outcome, game }) {
                             {game}
                         </Typography>
                         <p className={classes.spanScore}>{outcome}</p>
+                        <p className={classes.spanScore}>{created_at}</p>
                     </div>
                 </div>
             </div>
