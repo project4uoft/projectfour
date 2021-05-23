@@ -35,15 +35,15 @@ export default function Navbar({ fixed }) {
   const classes = useStyles();
 
 
-  console.log(window.location.href)
-  const profileBtn = () => {
-    if (window.location.href === "http://localhost:3000/profile"){
-      return true
-    }
-    else{
-      return false
-    }
-  }
+  // console.log(window.location.href)
+  // const profileBtn = () => {
+  //   if (window.location.href === "http://localhost:3000/profile"){
+  //     return true
+  //   }
+  //   else{
+  //     return false
+  //   }
+  // }
 
   return (
     <>
@@ -74,17 +74,7 @@ export default function Navbar({ fixed }) {
             <Typography variant="h6" className={classes.title}>
               Welcome: {user.nickname}
             </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              href="/profile"
-              disabled={profileBtn()}
-              className={classes.button}
-              endIcon={<Face />}
-              style={{ marginRight: "3em" }}
-            >
-              Profile
-          </Button>
+
             <Button
               variant="contained"
               color="primary"

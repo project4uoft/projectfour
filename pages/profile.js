@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from 'next/head'
+import styles from '../styles/Profile.module.css'
 import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0'
+import { connectToDatabase } from "../util/mongodb.js"
 
-import { createStyles, makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 
 import Navbar from "../components/Navbar";
@@ -13,70 +14,41 @@ import Ranked from "../components/profile/Ranked";
 import Achievements from "../components/profile/Achievements";
 
 
-const useStyles = makeStyles((theme) =>
-    createStyles({
 
-        cardContainer: {
-            position: 'relative',
-            width: '90vw',
-            height: '95vh',
-            top: '10vh',
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: '2fr 3fr 1fr',
-            gridGap: '20px',
-            padding: '25px',
-
-        },
-        middleContainer: {
-            height: '85vh',
-            display: 'grid',
-            gridTemplateRows: "1fr 1fr",
-        },
-
-        ranked: {
-            display: 'block',
-            width: '100%',
-            fontSize: '2em',
-            margin: '0',
-            textShadow: ['white 1px 1px 2px', 'black 10px 10px 20px']
-        }
-    }))
-
-export default withPageAuthRequired(function Profile() {
-
-
-
+export default withPageAuthRequired(function Profile({ _id,
+    postedBy, 
+    created_at, 
+    outcome, 
+    game
+ }) {
     const { user, error, isLoading } = useUser()
     if (isLoading) return <div>Loading...</div>
     if (error) return <div>{error.message}</div>
     if (user) {
 
-        const classes = useStyles();
-
         const profile = true;
-
-
 
         return (
             <>
-                <Meta title= {`${user.nickname}'s profile`} />
+                <Meta title="Game Room" />
 
                 <Navbar profile={profile} />
 
-                <div className={classes.cardContainer}>
+                <div className={styles.cardContainer}>
 
                     <UserBox user={user} />
 
-                    <div className={classes.middleContainer}>
+                    <div className={styles.middleContainer}>
 
                         <LastPlayed
-                            score={"4/7"}
-                            game={'Tic-Tac-Toe'}
+                            created_at = {created_at}
+                            outcome = {outcome}
+                            game = {game}
+   
                         />
 
                         <div>
-                            <p className={classes.ranked}>Ranked </p>
+                            <h3 className={styles.ranked}>Ranked </h3>
                             <Ranked />
                             <Ranked />
                         </div>
@@ -89,3 +61,28 @@ export default withPageAuthRequired(function Profile() {
         )
     }
 });
+
+
+// Fetch Game History
+export async function getServerSideProps(context) {
+    const { db } = await connectToDatabase()
+
+    const data = await db.collection("P4User").find({"postedBy":'bob@gmail.com'}).toArray();
+
+    const history = JSON.parse(JSON.stringify(data))
+    const {_id, postedBy, created_at, outcome, game} = history[0];
+
+    console.log(_id, postedBy, created_at, outcome, game)
+
+    return {
+        props: {
+            _id,
+            postedBy, 
+            created_at, 
+            outcome, 
+            game
+        }
+    }
+
+}
+

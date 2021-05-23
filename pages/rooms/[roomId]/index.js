@@ -8,9 +8,12 @@ import { useEffect, useRef, useState } from "react";
 import socketIOClient from "socket.io-client";
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 
+import { connectToDatabase } from '../util/mongodb'
+
+
 // import { useHistory, useLocation } from 'react-router-dom'
 //Import api routes to db
-import API from '../../../utils/API';
+import API from '../../../util/mongodb';
 
 
 const NEW_PLAYER_JOINED = "newPlayerJoin"; // Name of the event
@@ -22,7 +25,7 @@ const END_EVENT = "endBullShit";
 
 // functional component is wrapped in withPageAuthRequired method from auth0 to protect route
 // if user is not signed in - he will be redirected to login page
-export default withPageAuthRequired(function Home() {
+export default withPageAuthRequired(function Home( {isConnected}) {
 
 
   const router = useRouter();
@@ -50,6 +53,8 @@ export default withPageAuthRequired(function Home() {
     setGame(game);
   };
 
+
+  
 // const saveGame = () => {
 //   API.saveUser({
 //     postedBy: playerEmail,

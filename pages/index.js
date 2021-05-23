@@ -9,10 +9,13 @@ import { v4 as uuid } from "uuid";
 import { Container, Grid, Button } from "@material-ui/core";
 import { nanoid } from "nanoid";
 
-export default function Home() {
+
+export default function Home({}) {
   // Get user info from userProvider context of auth0 library
   const { user, error, isLoading } = useUser();
   const router = useRouter();
+
+
 
   // on the first render and whenever user or loading state chaneges check if user is logged in.
   // then redirect to game room page
@@ -24,6 +27,8 @@ export default function Home() {
       router.push(`/welcome`);
     }
   }, [user, isLoading]);
+
+
 
   return (
     <div>
@@ -137,3 +142,5 @@ export default function Home() {
     </div>
   );
 }
+
+

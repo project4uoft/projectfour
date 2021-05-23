@@ -1,0 +1,24 @@
+.cardContainer {
+    position: relative;
+    width: 90vw;
+    height: 95vh;
+    top: 10vh;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 3fr 1fr;
+    grid-gap: 20px;
+    padding: 25px;
+
+}
+.middleContainer {
+    height: 85vh;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.ranked {
+    display: block;
+    width: 100%;
+    font-size: 2em;
+    text-shadow: white 1px 1px 2p, black 10px 10px 20px;
+}

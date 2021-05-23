@@ -19,7 +19,8 @@
     "framer-motion": "^4.1.11",
     "inquirer": "^8.0.0",
     "install": "^0.13.0",
-    "mongodb": "^3.6.6",
+    "isomorphic-unfetch": "^3.1.0",
+    "mongodb": "^3.6.8",
     "next": "10.2.0",
     "npm": "^7.11.2",
     "path": "^0.12.7",
@@ -28,6 +29,7 @@
     "react-router-dom": "^5.2.0",
     "socket.io": "^4.0.2",
     "socket.io-client": "^4.0.1",
+    "styled-components": "^5.3.0",
     "tslib": "^2.2.0",
     "uuid": "^8.3.2"
   },

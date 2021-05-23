@@ -10,37 +10,34 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
     root: {
         width: '100%',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     box: {
-        height: '70%',
+        height: '110%',
         zIndex: '1',
-        maxWidth: '70%',
+        // maxWidth: '70%',
         display: 'grid',
-        margin:'auto',
-        gridTemplateRows: '1fr 3fr',
+        margin: 'auto',
         color: 'white',
-        backgroundColor: '#3f51b5',
-        border: '3px solid #3f51b5',
-        boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
-        borderRadius: '30%',
+        borderRadius: '30% 0',
         textAlign: 'center',
     },
     info: {
-        height: '80%',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        height: '100%',
         color: 'white',
-        textAlign: 'center'
+        textAlign: 'center',
+        padding:'1%'
     },
     scoreBox: {
+        height: '80%',
         width: '80%',
-        marginLeft: '10%',
+        marginLeft: '5%',
+        padding:'5%',
         border: '3px solid #3f51b5',
-        boxShadow: 'white 0px 3px 5px',
+        boxShadow: 'black 0px 3px 5px',
         borderRadius: '30%',
         fontSize: '30px',
-        marginRight: '10%',
+        marginRight: '5%',
     },
     title: {
         backgroundColor: 'none',
@@ -51,52 +48,70 @@ const useStyles = makeStyles({
     },
     spanScore: {
         fontSize: '30px',
-        paddingBottom: '5%',
-        marginBottom: 5
     }
 });
 
 
-function LastPlayed({ game, score, title }) {
+function LastPlayed({ created_at, outcome, game }) {
 
     const classes = useStyles();
-
-
+    game="Bullshit"
 
     const gameIcon = (x) => {
         switch (x) {
             case 'Tic-Tac-Toe':
-                return <img src={TicTacToe}></img>
+                return <Image
+                    src={`/assets/images/profile/TicTacToe.png`}
+                    alt="logo"
+                    width={'100%'}
+                    height={'100%'}
+                    margin={5}
+                />
+            case 'Mafia':
+                return <Image
+                src={`/assets/images/profile/Mafia.png`}
+                alt="logo"
+                width={'100%'}
+                height={'100%'}
+                margin={5}
+            />
+            case 'Big Two':
+                return <Image
+                src={`/assets/images/profile/BigTwo.png`}
+                alt="logo"
+                width={'100%'}
+                height={'100%'}
+                margin={5}
+            />
+            case 'Bullshit':
+                return <Image
+                src={`/assets/images/profile/Bullshit.png`}
+                alt="logo"
+                width={'100%'}
+                height={'100%'}
+                margin={5}
+            />
                 break;
         }
     }
 
+
+
     return (
         <div className={classes.root}>
             <div className={classes.box}>
-            <div>
-                <h3 className={classes.title}>Last Game Played</h3>
-            </div>
-            <div className={classes.info}>
-                <div className={classes.scoreBox}>
-                    <Image
-                        src={`/assets/images/profile/TicTacToe.png`}
-                        alt="logo"
-                        width={'100%'}
-                        height={'100%'}
-                        margin={5}
-                    />
-                    <Typography >
-                        {game}
-                    </Typography>
+                <div>
+                    <h3 className={classes.title}>Last Game Played</h3>
                 </div>
-                <div className={classes.scoreBox}>
-                    <p className={classes.spanScore}>{score}</p>
-                    <span >
-                        {(parseInt(score) > 0.5) ? `You Won!` : `You Lost!`}
-                    </span>
+                <div className={classes.info}>
+                    <div className={classes.scoreBox}>
+                        { gameIcon(game) }
+                        <Typography >
+                            {game}
+                        </Typography>
+                        <p className={classes.spanScore}>{outcome}</p>
+                    </div>
                 </div>
-            </div>
             </div>
         </div>
     )
