@@ -6,7 +6,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {ExitToApp, Face} from "@material-ui/icons";
+import { ExitToApp, Face } from "@material-ui/icons";
 
 
 
@@ -31,10 +31,10 @@ export default function Navbar({ fixed }) {
   const classes = useStyles();
 
   const profileBtn = () => {
-    if (router.pathname === "/profile"){
+    if (router.pathname === "/profile") {
       return true
     }
-    else{
+    else {
       return false
     }
   }
@@ -45,27 +45,32 @@ export default function Navbar({ fixed }) {
         <AppBar position="static">
           <Toolbar>
             <Typography align="justify">
-              <Image
-                src={`/assets/images/homepage/Logo1.png`}
-                alt="logo"
-                width={40}
-                height={40}
-                margin={5}
-              />
+              <a href="/">
+                <Image
+                  src={`/assets/images/homepage/Logo1.png`}
+                  alt="logo"
+                  width={40}
+                  height={40}
+                  margin={5}
+                  href="/welcome"
+                />
+              </a>
             </Typography>
             <Typography variant="h6" className={classes.title}>
+            <a href="/">
               Party House
+              </a>
             </Typography>
             <Button
-            variant="contained"
-            color="primary"
-            href="/profile"
-            disabled={profileBtn()}
-            className={classes.button}
-            endIcon={<Face />}
-            style={{ marginRight: "3em" }}
-          >
-            Profile
+              variant="contained"
+              color="primary"
+              href="/profile"
+              disabled={profileBtn()}
+              className={classes.button}
+              endIcon={<Face />}
+              style={{ marginRight: "3em" }}
+            >
+              Profile
         </Button>
             <Button
               variant="contained"

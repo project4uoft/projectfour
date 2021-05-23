@@ -6,7 +6,7 @@ import { connectToDatabase } from "../util/mongodb.js"
 
 import { Typography } from "@material-ui/core";
 
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar/navbar";
 import Meta from "../components/Meta";
 import UserBox from "../components/profile/UserBox";
 import LastPlayed from "../components/profile/LastPlayed";
