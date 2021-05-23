@@ -10,12 +10,13 @@ import Typography from '@material-ui/core/Typography';
 const useStyles = makeStyles({
     root: {
         width: '100%',
+        height: '100%',
         justifyContent: 'center'
     },
     box: {
         height: '110%',
         zIndex: '1',
-        // maxWidth: '70%',
+        maxWidth: '50%',
         display: 'grid',
         margin: 'auto',
         color: 'white',
@@ -26,28 +27,21 @@ const useStyles = makeStyles({
         height: '100%',
         color: 'white',
         textAlign: 'center',
-        padding:'1%'
     },
     scoreBox: {
-        height: '80%',
-        width: '80%',
+        height: '100%',
+        width: 'auto',
         marginLeft: '5%',
-        padding:'5%',
+        // padding:'5%',
         border: '3px solid #3f51b5',
         boxShadow: 'black 0px 3px 5px',
         borderRadius: '30%',
         fontSize: '30px',
         marginRight: '5%',
     },
-    title: {
-        backgroundColor: 'none',
-        fontSize: '1.5em',
-        marginTop: 6,
-        marginBottom: 4
 
-    },
     spanScore: {
-        fontSize: '30px',
+        fontSize: '0.7em',
     }
 });
 
@@ -55,10 +49,9 @@ const useStyles = makeStyles({
 function LastPlayed({ created_at, outcome, game }) {
 
     const classes = useStyles();
-    game="Bullshit"
 
-    const gameIcon = (x) => {
-        switch (x) {
+    const gameIcon = (game) => {
+        switch (game) {
             case 'Tic-Tac-Toe':
                 return <Image
                     src={`/assets/images/profile/TicTacToe.png`}
@@ -69,7 +62,7 @@ function LastPlayed({ created_at, outcome, game }) {
                 />
             case 'Mafia':
                 return <Image
-                src={`/assets/images/profile/Mafia.png`}
+                src={`/assets/images/profile/Mafia.svg`}
                 alt="logo"
                 width={'100%'}
                 height={'100%'}
@@ -100,9 +93,6 @@ function LastPlayed({ created_at, outcome, game }) {
     return (
         <div className={classes.root}>
             <div className={classes.box}>
-                <div>
-                    <h3 className={classes.title}>Last Game Played</h3>
-                </div>
                 <div className={classes.info}>
                     <div className={classes.scoreBox}>
                         { gameIcon(game) }

@@ -15,10 +15,19 @@
     display: grid;
     grid-template-rows: 1fr 1fr;
 }
+.gamesContainer {
+    display: flex;
+    flex-direction: row;
 
+}
 .ranked {
     display: block;
     width: 100%;
     font-size: 2em;
     text-shadow: white 1px 1px 2p, black 10px 10px 20px;
+}
+.title {
+    font-size: 1.3em;
+    margin-top: 6;
+    margin-bottom: 4;
 }
