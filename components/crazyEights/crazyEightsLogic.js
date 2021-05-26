@@ -38,7 +38,7 @@ const CrazyEightsLogic = () => {
 
     const dealerPosition = players.indexOf(dealer)
 
-    console.log("card palyed:", playedCard)
+    console.log("card played:", playedCard)
 
 
     let numPlayers = players.length;
@@ -126,9 +126,10 @@ const CrazyEightsLogic = () => {
         makeMove(currentPlayer, chosenCard)
         console.log("setiting played card from clcick event", chosenCard)
     }
-
+    
     // card must match number, or suit, or AN EIGHT, or draw from the pile and continue their turn. 
     const makeMove = (currentPlayer, playedCard) => {
+        console.log("start ofmake  a move:", currentPlayer.hand)
         console.log("played card inside top of make move", playedCard)
         //If the user plays a card with the number '8', they can play anytime and chagne the current suit
         if (playedCard.rank === "8") {
@@ -138,6 +139,7 @@ const CrazyEightsLogic = () => {
             const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
             //Pull the object out of the array it's in 
             const cardRemovedFromHand = cardspliced[0]
+            console.log(currentPlayer.hand)
             console.log("card removed from hand if the players plays a n 8", cardRemovedFromHand)
             //Add it to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
@@ -150,15 +152,19 @@ const CrazyEightsLogic = () => {
 
         // If the players card suit matches the last card added to the pile 
         if (playedCard.suit === currentSuit) {
+            console.log(currentPlayer.hand)
             console.log("the card suit matches, card accepted")
 
             //Get the index of the played card in the payers hand
-            const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank) //<<--- this is finding the wrong index, its returning the first one it finds rather than the exact card we clicks
+            const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank) 
             console.log("played card index in the players hand", playedCardIndex)
             const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
             console.log("card spliced from hand inside an array", cardspliced)
             const cardRemovedFromHand = cardspliced[0]
+            console.log(currentPlayer.hand)
             console.log("card removed from hand if the suit matches", cardRemovedFromHand)
+
+            // CARD IS NOT BEING REMOVED FROM HAND FAST ENOUGH, STILL SHOWING IN OTHER PLAYERS HAND AND CURRENT PLAYERS HAND WHEN THE TURN COMES BACK TO THAT PLAYER - NOT SURE WHAT THE OCCASSIONS OF THIS HAPPENING ARE. DEFINITELY AFTER A CARD IS PICKED UP AND ADDED TO HAND BUT CORRECT INDEX AND HAND IS SELECTED IN THE LOGS ABOVE..
 
             //Remove from the hand and push to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
@@ -166,6 +172,7 @@ const CrazyEightsLogic = () => {
             //Flatten the discard pile, so there are no nested arrays
             // discardPile = Array.prototype.concat.apply([], discardPile);
             console.log("discard pile", discardPile)
+            console.log("currentPlayer hand", currentPlayer.hand)
             EndTurnMovePlayer()
         } else  {
             console.log("can't play this card")
@@ -183,6 +190,7 @@ const CrazyEightsLogic = () => {
             //Remove from the hand and push to the discard pile
             const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
             const cardRemovedFromHand = cardspliced[0]
+            console.log(currentPlayer.hand)
             console.log("card being spliced from the users hand if the rank matches", cardRemovedFromHand)
 
             //Remove from the hand and push to the discard pile
@@ -193,14 +201,11 @@ const CrazyEightsLogic = () => {
 
     }
 
+    console.log("discard pile after make move", discardPile)
 
     const pickUp = () => {
-        console.log("stockpile", stockPile)
-        console.log("stockpile", stockPile[0])
         setPassVisible(true)
         setCardPickedUp(true)
-        console.log("current player hand before pick up:", currentPlayer.hand)
-        console.log(currentPlayer.hand)
 
         if (stockPile.length > 0) {
 
@@ -209,9 +214,11 @@ const CrazyEightsLogic = () => {
             let cardObjectRemovedArray = splicedFromStockPile[0]
 
             setSplicedStockPileCardObj(cardObjectRemovedArray)
+// LEFT OFF CARD IS NOT BEING ADDED TO THE PLAYERS HAND ON PICK UP??
 
             setPlayerSet(true)
             console.log("card added to players hand:", cardObjectRemovedArray)
+            console.log("current hand:", currentPlayer.hand)
 
         } else {
             console.log("we need to shuffle the deck")
