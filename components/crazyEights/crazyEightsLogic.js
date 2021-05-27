@@ -11,13 +11,13 @@ const CrazyEightsLogic = () => {
         {
             position: 1,
             hand: [],
-            score: 175,
+            score: 0,
             gamesWon: 0
         },
         {
             position: 2,
             hand: [],
-            score: 175,
+            score: 0,
             gamesWon: 0
         }
     ])
@@ -88,7 +88,7 @@ const CrazyEightsLogic = () => {
         setStockPile([...stockPileArr])
         // //Pick a random dealer
         setDealer(players[Math.floor(Math.random() * numPlayers)])
-        for(var i = 0; i < players.length; i++) {
+        for (var i = 0; i < players.length; i++) {
             console.log(players[i].hand)
         }
     }
@@ -126,11 +126,13 @@ const CrazyEightsLogic = () => {
         makeMove(currentPlayer, chosenCard)
         console.log("setiting played card from clcick event", chosenCard)
     }
-    
+
     // card must match number, or suit, or AN EIGHT, or draw from the pile and continue their turn. 
     const makeMove = (currentPlayer, playedCard) => {
-        console.log("start ofmake  a move:", currentPlayer.hand)
-        console.log("played card inside top of make move", playedCard)
+        console.log("currentplayer:", currentPlayer)
+        console.log("players hand", players[currentPlayerIndex].hand)
+
+
         //If the user plays a card with the number '8', they can play anytime and chagne the current suit
         if (playedCard.rank === "8") {
             //Get the index of the played card in the payers hand
@@ -139,44 +141,31 @@ const CrazyEightsLogic = () => {
             const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
             //Pull the object out of the array it's in 
             const cardRemovedFromHand = cardspliced[0]
-            console.log(currentPlayer.hand)
-            console.log("card removed from hand if the players plays a n 8", cardRemovedFromHand)
+            // const cardRemovedFromHand = cardspliced[0]
             //Add it to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
             //Let the user set the suit for the next turn
             const suitChange = prompt("What suit would you like to make the next play?")
-            setCurrentSuit(suitChange)
-            EndTurnMovePlayer()
+            const lowerSuit = suitChange.toLowerCase()
+            setCurrentSuit(lowerSuit)
             return
         }
 
         // If the players card suit matches the last card added to the pile 
         if (playedCard.suit === currentSuit) {
-            console.log(currentPlayer.hand)
-            console.log("the card suit matches, card accepted")
+            console.log("suit matches, card accepted")
 
-            //Get the index of the played card in the payers hand
-            const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank) 
-            console.log("played card index in the players hand", playedCardIndex)
-            const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
-            console.log("card spliced from hand inside an array", cardspliced)
-            const cardRemovedFromHand = cardspliced[0]
-            console.log(currentPlayer.hand)
-            console.log("card removed from hand if the suit matches", cardRemovedFromHand)
+            //Get the index of the played card in the current players hand
+            const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
 
-            // CARD IS NOT BEING REMOVED FROM HAND FAST ENOUGH, STILL SHOWING IN OTHER PLAYERS HAND AND CURRENT PLAYERS HAND WHEN THE TURN COMES BACK TO THAT PLAYER - NOT SURE WHAT THE OCCASSIONS OF THIS HAPPENING ARE. DEFINITELY AFTER A CARD IS PICKED UP AND ADDED TO HAND BUT CORRECT INDEX AND HAND IS SELECTED IN THE LOGS ABOVE..
+            //Get the card using the index found
+            const cardRemovedFromHand = currentPlayer.hand[playedCardIndex]
 
             //Remove from the hand and push to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
-
-            //Flatten the discard pile, so there are no nested arrays
-            // discardPile = Array.prototype.concat.apply([], discardPile);
-            console.log("discard pile", discardPile)
-            console.log("currentPlayer hand", currentPlayer.hand)
-            EndTurnMovePlayer()
-        } else  {
+            return
+        } else {
             console.log("can't play this card")
-
         }
 
 
@@ -185,23 +174,52 @@ const CrazyEightsLogic = () => {
 
             // The user should be able to choose the suit
             const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
-            console.log("played card index inside the players hand", playedCardIndex)
 
             //Remove from the hand and push to the discard pile
             const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
             const cardRemovedFromHand = cardspliced[0]
-            console.log(currentPlayer.hand)
-            console.log("card being spliced from the users hand if the rank matches", cardRemovedFromHand)
 
             //Remove from the hand and push to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
             setCurrentSuit(playedCard.suit)
-            EndTurnMovePlayer()
+            return
         }
 
     }
 
-    console.log("discard pile after make move", discardPile)
+    useEffect(() => {
+        //To able to run when current player has a value
+        if (currentPlayer) {
+            console.log(players[currentPlayerIndex])
+            console.log(players[currentPlayerIndex].hand)
+            console.log(playedCard.suit)
+            console.log(playedCard.rank)
+            const playedCardIndex = players[currentPlayerIndex].hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
+            console.log("playedCardIndex:", playedCardIndex)
+
+            currentPlayer.hand.splice(playedCardIndex, 1)
+
+            //Make copy of players
+            let playersCopy = [...players]
+            // //redefine the one object we want to update using bracket notatation for the index
+            // //Create copy of the the obj and then rewriting the value to change
+            playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], hand: currentPlayer.hand }
+
+            setPlayers(playersCopy)
+
+            console.log(players)
+            console.log(players[currentPlayerIndex])
+            console.log("IM HIT")
+            EndTurnMovePlayer()
+
+        }
+
+        //Only execute when the below state is changed 
+    }, [playedCard])
+
+
+    console.log(currentPlayer)
+    console.log(players)
 
     const pickUp = () => {
         setPassVisible(true)
@@ -214,11 +232,9 @@ const CrazyEightsLogic = () => {
             let cardObjectRemovedArray = splicedFromStockPile[0]
 
             setSplicedStockPileCardObj(cardObjectRemovedArray)
-// LEFT OFF CARD IS NOT BEING ADDED TO THE PLAYERS HAND ON PICK UP??
+            // LEFT OFF CARD IS NOT BEING ADDED TO THE PLAYERS HAND ON PICK UP?? -- it is but in the use effect because this state is being updated too
 
             setPlayerSet(true)
-            console.log("card added to players hand:", cardObjectRemovedArray)
-            console.log("current hand:", currentPlayer.hand)
 
         } else {
             console.log("we need to shuffle the deck")
@@ -228,15 +244,7 @@ const CrazyEightsLogic = () => {
 
             setSplicedStockPileCardObj(cardObjectRemovedArray)
 
-            //Add on to hand array with the top card of the stock pile
-            setCurrentPlayer(currentPlayer => ({
-                ...currentPlayer, //< -- Shallow copy state
-                //copy existing nested state array into new array and append new element
-                hand: [...currentPlayer.hand, splicedStockPileCardObj]
-            }))
-
             setPlayerSet(true)
-            console.log("card added to players hand:", cardObjectRemovedArray)
 
         }
     }
@@ -261,21 +269,23 @@ const CrazyEightsLogic = () => {
             setPlayers(playersCopy)
             setPlayerSet(false)
         }
-
     }, [playerSet])
 
 
-
     const EndTurnMovePlayer = () => {
-
-        if (currentPlayer.hand.length === 0) {
-            console.log(`GAME OVER! Player ${currentPlayer.position} wins this round!`)
-            endOfRound();
-        }
         //Allows the next player to pick up a card again
         setCardPickedUp(false)
         // hides the pass button until the next player picks up a card if they have to
         setPassVisible(false)
+
+        for (var i = 0; i < players.length; i++) {
+            if (players[i].hand.length === 0) {
+                console.log(`GAME OVER! Player ${currentPlayer.position} wins this round!`)
+                endOfRound();
+            } else {
+                continue
+            }
+        }
 
         // If the index of the current player is the last in the array, go to the start [0] again
         if (currentPlayerIndex === players.length - 1) {
@@ -315,14 +325,23 @@ const CrazyEightsLogic = () => {
                 }
             }
             sum()
+
             //Make copy of players
             let playersCopy = [...players]
             //redefine the one object we want to update using bracket notatation for the index
             //Create copy of the the obj and then rewriting the value to change
             playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], score: currentPlayer.score }
 
+            for (var i = 0; i < playersCopy.length; i++) {
+                playersCopy[i] = { ...playersCopy[i], hand: []}
+                console.log(playersCopy[i])
+            }
+
+
             setPlayers(playersCopy)
             checkWinner()
+
+            console.log("current player after set players: ", currentPlayer)
 
         }
     }
@@ -349,6 +368,8 @@ const CrazyEightsLogic = () => {
         //Create copy of the the obj and then rewriting the hands to empty
 
         for (var i = 0; i < playersCopy.length; i++) {
+            // SHOULD I HAVE THE SCORE AS ZERO HERE??
+
             playersCopy[i] = { ...playersCopy[i], hand: [], score: 0 }
             console.log(playersCopy[i])
         }
