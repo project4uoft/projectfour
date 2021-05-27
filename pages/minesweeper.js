@@ -1,6 +1,6 @@
-import Head from 'next/head';
+// import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import styles from '../styles/Minesweeper.module.css';
 
 const Minesweeper = () => {
@@ -9,7 +9,8 @@ const Minesweeper = () => {
   // Amount of mines checked
   const [mineChecked, setMineChecekd] = useState(0);
   // Mine numbers
-  const [MINES_NUMBER, setMinesNumber] = useState(10);
+  const NUMBER_MINES = 10;
+  const [MINES_NUMBER, setMinesNumber] = useState(NUMBER_MINES);
   // Board size
   const BOARD_NUMBER = 10;
   // state for the board
@@ -22,10 +23,12 @@ const Minesweeper = () => {
     MARKED: 'marked'
   }
 
+  const [playAgain, setPlayAgain] = useState(true);
+
   // createBoard function will render the board
   const createBoard = (boardSize, numberOfMines) => {
     const board = [];
-
+    setMinesNumber(NUMBER_MINES);
     const minePostion = getMinePosition(boardSize, numberOfMines)
 
     for(let x = 0; x < boardSize; x++) {
@@ -36,7 +39,8 @@ const Minesweeper = () => {
             x,
             y,
             mine: minePostion.some(positionMatch.bind(null, {x, y})),
-            status: 'hidden'
+            status: 'hidden',
+            text:''
           }
         ]
 
@@ -44,11 +48,15 @@ const Minesweeper = () => {
       }
       board.push(row);
     }
-    return setBoard(board);
+    return board;
   }
 
   useEffect(() => {
-    return createBoard(BOARD_NUMBER, MINES_NUMBER);
+    if(playAgain){
+      setBoard(createBoard(BOARD_NUMBER, NUMBER_MINES));
+      setPlayAgain(false);
+    }
+    // return createBoard(BOARD_NUMBER, NUMBER_MINES);
     //Use the next lines if line 97 is uncommented
     // if(board) {
     //   console.log('rerendered')
@@ -57,7 +65,7 @@ const Minesweeper = () => {
     // }
     
     // console.log(board);
-  }, [])
+  }, [playAgain])
   //Use this if line 97 is uncommented
   // }, [empty]) 
 
@@ -97,44 +105,39 @@ const Minesweeper = () => {
   }
 
   // Check for tile clicks
-  const tileClick = (e) => {
+  const tileClick = (row, col) => {
     if(lost) {
       return;
     }
-    const tile = JSON.parse(e.target.dataset.tile)[0];
-    const mineCheck = JSON.parse(e.target.dataset.tile)[0].mine;
-    if (e.target.dataset.status !== TILE_STATUSES.HIDDEN) {
+    const tile = board[row][col][0];
+    console.log(tile)
+    const mineCheck = tile.mine;
+    const tempBoard = [...board];
+
+    if (tile.status !== TILE_STATUSES.HIDDEN) {
       return
     }
     if(mineCheck) {
       setLost(!lost);
       checkMines()
-      return e.target.dataset.status = TILE_STATUSES.MINE;
+      tile.status = TILE_STATUSES.MINE;
+      // return e.target.dataset.status = TILE_STATUSES.MINE;
     } else {
-      e.target.dataset.status = TILE_STATUSES.NUMBER;
+      // e.target.dataset.status = TILE_STATUSES.NUMBER;
+      tile.status = TILE_STATUSES.NUMBER;
     }
     const adjacentTiles = nearbyTiles(board, tile);
     console.log(adjacentTiles);
     const mines = adjacentTiles.filter(t => t[0].mine);
     if(mines.length === 0) {
-      /* The next lines of commented out code was used to reveal all the adjacent tiles that did not have any number, i.e. empty tiles. It was commented out due that it casued some bugs */
-
-      // board.forEach(row => row.forEach(tile => {
-      //   for(let i=0; i<adjacentTiles.length; i++) {
-      //     if(tile[0].x === adjacentTiles[i][0].x && tile[0].y === adjacentTiles[i][0].y) {
-      //       // console.log(tile[0].x, ' ', adjacentTiles[i][0].x )
-      //       tile[0].status = TILE_STATUSES.NUMBER
-      //       console.log(tile[0]);
-      //       setBoard(board);
-      //     }
-      //   }
-      // }))
-      // setEmpty(!empty);
-      return;
     } else {
-      e.target.textContent = mines.length;
+      console.log('num of mines', mines.length)
+      tile.text =  mines.length;
     }
+    tempBoard[row][col][0] = tile;
+    setBoard(tempBoard)
   }
+
 
   // Check the nearby tiles after clicking to confirm if there are any mines
   const nearbyTiles = (board, tile) => {
@@ -158,10 +161,12 @@ const Minesweeper = () => {
   }
 
   // Check for right clicks for marking
-  const contextMenu = (e) => {
-    e.preventDefault();
-    let tileInfo = JSON.parse(e.target.dataset.tile)[0];
-    console.log(tileInfo.mine)
+  const contextMenu = (row, col) => {
+    // let tileInfo = JSON.parse(e.target.dataset.tile)[0];
+    // console.log(tileInfo.mine)
+    
+    const tile = board[row][col][0];
+    console.log(tile)
     //Stop if win
     if(win) {
       return;
@@ -171,21 +176,21 @@ const Minesweeper = () => {
       return;
     }
     //Prevent marking more than 10 mines
-    if(MINES_NUMBER === 0 && e.target.dataset.status === TILE_STATUSES.MARKED) {
+    if(MINES_NUMBER === 0 && tile.status === TILE_STATUSES.MARKED) {
       setMinesNumber(MINES_NUMBER + 1)
-      return e.target.dataset.status = TILE_STATUSES.HIDDEN;
+      tile.status = TILE_STATUSES.HIDDEN;
     } else if (MINES_NUMBER === 0) {
       return;
     }
     // Prevent marking revealed tiles
-    if(e.target.dataset.status !== TILE_STATUSES.HIDDEN && e.target.dataset.status !== TILE_STATUSES.MARKED) {
+    if(tile.status !== TILE_STATUSES.HIDDEN && tile.status !== TILE_STATUSES.MARKED) {
       return
     }
 
-    if(e.target.dataset.status === TILE_STATUSES.MARKED) {
-      e.target.dataset.status = TILE_STATUSES.HIDDEN
+    if(tile.status === TILE_STATUSES.MARKED) {
+      tile.status = TILE_STATUSES.HIDDEN
       //if user unchecks mine reduce the minechecked if tile is a mine
-      if(tileInfo.mine) {
+      if(tile.mine) {
         setMineChecekd(mineChecked - 1)
       }
       if(MINES_NUMBER === 10) {
@@ -194,9 +199,9 @@ const Minesweeper = () => {
         setMinesNumber(MINES_NUMBER + 1)
       }
     } else {
-      e.target.dataset.status = TILE_STATUSES.MARKED
+      tile.status = TILE_STATUSES.MARKED
       // Increase the count and if count is 10 user wins!
-      if(tileInfo.mine) {
+      if(tile.mine) {
         setMineChecekd(mineChecked + 1);
         if(mineChecked === 10) {
           setWin(!win);
@@ -204,18 +209,23 @@ const Minesweeper = () => {
       } 
       setMinesNumber(MINES_NUMBER - 1);
     }
+    
+    const tempBoard = [...board];
+    tempBoard[row][col][0] = tile;
+    setBoard(tempBoard)
   }
 
   return(
     <>
+      {console.log('returning', board)}
       <h3>Minesweeper</h3>
       <h5>Mines left: {MINES_NUMBER}</h5>
       <div style={{display:  `${!lost ? 'none': ''}`}}>
        <p>You Lost</p>
         <button  onClick={()=> {
           setLost(false);
-          
-          createBoard(BOARD_NUMBER, MINES_NUMBER)
+          setPlayAgain(true);
+          // createBoard(BOARD_NUMBER, NUMBER_MINES)
         }}>Try again?</button>
       </div>
       <div style={{display:  `${!win ? 'none': ''}`}}>
@@ -223,11 +233,12 @@ const Minesweeper = () => {
         <button  onClick={()=> {
           setWin(false);
           
-          createBoard(BOARD_NUMBER, MINES_NUMBER)
+          setPlayAgain(true);
+          // createBoard(BOARD_NUMBER, NUMBER_MINES)
         }}>Try again?</button>
       </div>
       <div className={styles.board}>
-        {!board ? '' : board.map(row => row.map((tile, index) => <div key={index} data-status={tile[0].status} className={styles.board} onClick={tileClick} onContextMenu={contextMenu} data-tile={JSON.stringify(tile)}>{tile.status}</div>))}
+        {board && board.map((row, rowIndex) => row.map((tile, index) => <div key={index} data-status={tile[0].status} onClick={() => tileClick(rowIndex,index)} onContextMenu={(e) => {e.preventDefault(); contextMenu(rowIndex,index)}} data-tile={JSON.stringify(tile)}>{tile[0].text}</div>))}
       </div>
     </>
   )
