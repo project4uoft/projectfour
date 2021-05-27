@@ -146,7 +146,12 @@ const CrazyEightsLogic = () => {
             setDiscardPile([...discardPile, cardRemovedFromHand])
             //Let the user set the suit for the next turn
             const suitChange = prompt("What suit would you like to make the next play?")
-            const lowerSuit = suitChange.toLowerCase()
+            let lowerSuit;
+            if(!suitChange){
+                lowerSuit = cardRemovedFromHand.suit
+            } else {
+                lowerSuit = suitChange.toLowerCase()
+            }
             setCurrentSuit(lowerSuit)
             return
         }
