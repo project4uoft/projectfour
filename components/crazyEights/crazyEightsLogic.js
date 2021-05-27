@@ -33,6 +33,7 @@ const CrazyEightsLogic = () => {
     const [passVisible, setPassVisible] = useState(false)
     const [cardPickedUp, setCardPickedUp] = useState(false)
     const [splicedStockPileCardObj, setSplicedStockPileCardObj] = useState({})
+    const [validCardPlayed, setValidCardPlayed] = useState(false)
 
     const [gameOver, setGameOver] = useState()
 
@@ -147,12 +148,13 @@ const CrazyEightsLogic = () => {
             //Let the user set the suit for the next turn
             const suitChange = prompt("What suit would you like to make the next play?")
             let lowerSuit;
-            if(!suitChange){
+            if (!suitChange) {
                 lowerSuit = cardRemovedFromHand.suit
             } else {
                 lowerSuit = suitChange.toLowerCase()
             }
             setCurrentSuit(lowerSuit)
+            setValidCardPlayed(true)
             return
         }
 
@@ -168,6 +170,7 @@ const CrazyEightsLogic = () => {
 
             //Remove from the hand and push to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
+            setValidCardPlayed(true)
             return
         } else {
             console.log("can't play this card")
@@ -187,6 +190,7 @@ const CrazyEightsLogic = () => {
             //Remove from the hand and push to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
             setCurrentSuit(playedCard.suit)
+            setValidCardPlayed(true)
             return
         }
 
@@ -194,13 +198,8 @@ const CrazyEightsLogic = () => {
 
     useEffect(() => {
         //To able to run when current player has a value
-        if (currentPlayer) {
-            console.log(players[currentPlayerIndex])
-            console.log(players[currentPlayerIndex].hand)
-            console.log(playedCard.suit)
-            console.log(playedCard.rank)
+        if (currentPlayer && validCardPlayed) {
             const playedCardIndex = players[currentPlayerIndex].hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
-            console.log("playedCardIndex:", playedCardIndex)
 
             currentPlayer.hand.splice(playedCardIndex, 1)
 
@@ -212,15 +211,15 @@ const CrazyEightsLogic = () => {
 
             setPlayers(playersCopy)
 
-            console.log(players)
-            console.log(players[currentPlayerIndex])
-            console.log("IM HIT")
             EndTurnMovePlayer()
-
         }
-
+        
+        setValidCardPlayed(false)
         //Only execute when the below state is changed 
-    }, [playedCard])
+        // setValidCardPlayed(false)
+        
+    }, [validCardPlayed])
+
 
 
     console.log(currentPlayer)
@@ -338,7 +337,7 @@ const CrazyEightsLogic = () => {
             playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], score: currentPlayer.score }
 
             for (var i = 0; i < playersCopy.length; i++) {
-                playersCopy[i] = { ...playersCopy[i], hand: []}
+                playersCopy[i] = { ...playersCopy[i], hand: [] }
                 console.log(playersCopy[i])
             }
 
