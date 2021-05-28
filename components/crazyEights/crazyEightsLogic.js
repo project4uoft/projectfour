@@ -34,12 +34,9 @@ const CrazyEightsLogic = () => {
     const [cardPickedUp, setCardPickedUp] = useState(false)
     const [splicedStockPileCardObj, setSplicedStockPileCardObj] = useState({})
     const [validCardPlayed, setValidCardPlayed] = useState(false)
-
     const [gameOver, setGameOver] = useState()
 
     const dealerPosition = players.indexOf(dealer)
-
-    console.log("card played:", playedCard)
 
 
     let numPlayers = players.length;
@@ -130,19 +127,20 @@ const CrazyEightsLogic = () => {
 
     // card must match number, or suit, or AN EIGHT, or draw from the pile and continue their turn. 
     const makeMove = (currentPlayer, playedCard) => {
-        console.log("currentplayer:", currentPlayer)
-        console.log("players hand", players[currentPlayerIndex].hand)
-
+       
+        for (var i = 0; i < currentPlayer.hand.length; i++){
+            console.log([i], currentPlayer.hand[i])
+        }
+        for(var i = 0; i < players[currentPlayerIndex].hand.length; i++){
+            console.log([i], players[currentPlayerIndex].hand[i])
+        }
 
         //If the user plays a card with the number '8', they can play anytime and chagne the current suit
         if (playedCard.rank === "8") {
             //Get the index of the played card in the payers hand
             const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
-            //Splice the card from the plaers hand
-            const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
             //Pull the object out of the array it's in 
-            const cardRemovedFromHand = cardspliced[0]
-            // const cardRemovedFromHand = cardspliced[0]
+            const cardRemovedFromHand = currentPlayer.hand[playedCardIndex]
             //Add it to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
             //Let the user set the suit for the next turn
@@ -172,9 +170,7 @@ const CrazyEightsLogic = () => {
             setDiscardPile([...discardPile, cardRemovedFromHand])
             setValidCardPlayed(true)
             return
-        } else {
-            console.log("can't play this card")
-        }
+        } 
 
 
         if (playedCard.rank === discardPile[discardPile.length - 1].rank) {
@@ -184,8 +180,7 @@ const CrazyEightsLogic = () => {
             const playedCardIndex = currentPlayer.hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
 
             //Remove from the hand and push to the discard pile
-            const cardspliced = currentPlayer.hand.splice(playedCardIndex, 1)
-            const cardRemovedFromHand = cardspliced[0]
+            const cardRemovedFromHand = currentPlayer.hand[playedCardIndex]
 
             //Remove from the hand and push to the discard pile
             setDiscardPile([...discardPile, cardRemovedFromHand])
@@ -193,7 +188,6 @@ const CrazyEightsLogic = () => {
             setValidCardPlayed(true)
             return
         }
-
     }
 
     useEffect(() => {
@@ -201,43 +195,33 @@ const CrazyEightsLogic = () => {
         if (currentPlayer && validCardPlayed) {
             const playedCardIndex = players[currentPlayerIndex].hand.findIndex(x => x.suit === playedCard.suit && x.rank === playedCard.rank)
 
+            //Remove the card from the current players hand
             currentPlayer.hand.splice(playedCardIndex, 1)
 
             //Make copy of players
             let playersCopy = [...players]
-            // //redefine the one object we want to update using bracket notatation for the index
+
             // //Create copy of the the obj and then rewriting the value to change
             playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], hand: currentPlayer.hand }
 
             setPlayers(playersCopy)
-
             EndTurnMovePlayer()
+
         }
         
         setValidCardPlayed(false)
         //Only execute when the below state is changed 
-        // setValidCardPlayed(false)
-        
     }, [validCardPlayed])
 
-
-
-    console.log(currentPlayer)
-    console.log(players)
 
     const pickUp = () => {
         setPassVisible(true)
         setCardPickedUp(true)
 
         if (stockPile.length > 0) {
-
             let splicedFromStockPile = stockPile.splice(stockPile[0], 1)
-
             let cardObjectRemovedArray = splicedFromStockPile[0]
-
             setSplicedStockPileCardObj(cardObjectRemovedArray)
-            // LEFT OFF CARD IS NOT BEING ADDED TO THE PLAYERS HAND ON PICK UP?? -- it is but in the use effect because this state is being updated too
-
             setPlayerSet(true)
 
         } else {
@@ -271,10 +255,10 @@ const CrazyEightsLogic = () => {
             playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], hand: [...playersCopy[currentPlayerIndex].hand, splicedStockPileCardObj] }
 
             setPlayers(playersCopy)
-            setPlayerSet(false)
         }
+        setPlayerSet(false)
     }, [playerSet])
-
+    
 
     const EndTurnMovePlayer = () => {
         //Allows the next player to pick up a card again
@@ -338,31 +322,24 @@ const CrazyEightsLogic = () => {
 
             for (var i = 0; i < playersCopy.length; i++) {
                 playersCopy[i] = { ...playersCopy[i], hand: [] }
-                console.log(playersCopy[i])
             }
-
 
             setPlayers(playersCopy)
             checkWinner()
+            emptyHands()
 
             console.log("current player after set players: ", currentPlayer)
-
         }
     }
 
-
-
     const emptyHands = () => {
-        setGameOver(true)
-
-        //Reset current players hands to empty
-        let tempCurrentPlayer = {
+         //Reset current players hands to empty
+         let tempCurrentPlayer = {
             ...currentPlayer, //<-- shallow state copy
             hand: [...currentPlayer.hand]
         }
 
         tempCurrentPlayer.hand = []
-        console.log("temp:", tempCurrentPlayer)
         setCurrentPlayer(tempCurrentPlayer)
 
         console.log("current player after set current palyer: ", currentPlayer)
@@ -372,10 +349,33 @@ const CrazyEightsLogic = () => {
         //Create copy of the the obj and then rewriting the hands to empty
 
         for (var i = 0; i < playersCopy.length; i++) {
-            // SHOULD I HAVE THE SCORE AS ZERO HERE??
+            playersCopy[i] = { ...playersCopy[i], hand: []}
+        }
 
+        setPlayers(playersCopy)
+
+    }
+
+    const endGame = () => {
+        setGameOver(true)
+
+        //Reset current players hands to empty
+        let tempCurrentPlayer = {
+            ...currentPlayer, //<-- shallow state copy
+            hand: [...currentPlayer.hand]
+        }
+
+        tempCurrentPlayer.hand = []
+        setCurrentPlayer(tempCurrentPlayer)
+
+        console.log("current player after set current palyer: ", currentPlayer)
+
+        //Make copy of all players
+        let playersCopy = [...players]
+        //Create copy of the the obj and then rewriting the hands to empty
+
+        for (var i = 0; i < playersCopy.length; i++) {
             playersCopy[i] = { ...playersCopy[i], hand: [], score: 0 }
-            console.log(playersCopy[i])
         }
         //give one point to the winner
         playersCopy[currentPlayerIndex] = { ...playersCopy[currentPlayerIndex], gamesWon: + 1 }
@@ -386,21 +386,17 @@ const CrazyEightsLogic = () => {
         console.log("code completed to change hand to empty ")
         setDiscardPile([])
         setStockPile([])
-        console.log(players)
-        console.log(stockPile)
-        console.log(discardPile)
     }
 
     // check to see if there's a winner
     const checkWinner = () => {
         console.log("checking for a winner")
-        console.log(players[currentPlayerIndex].score)
         switch (players.length) {
             case 2:
                 console.log("case 2 players was hit")
                 if (players[currentPlayerIndex].score >= 100) {
                     console.log(`Game over Player${currentPlayer.position} wins!`)
-                    emptyHands()
+                    endGame()
                 } else {
                     console.log(`Next Round`)
                     break
@@ -408,7 +404,7 @@ const CrazyEightsLogic = () => {
             case 3:
                 if (players[currentPlayerIndex].score >= 150) {
                     console.log(`Game over Player ${currentPlayer.position} wins!`)
-                    emptyHands()
+                    endGame()
                 } else {
                     console.log(`Next Round`)
                     break
@@ -416,8 +412,7 @@ const CrazyEightsLogic = () => {
             case 4:
                 if (players[currentPlayerIndex].score >= 200) {
                     console.log(`Game over ${currentPlayer} wins!`)
-                    emptyHands()
-
+                    endGame()
                 } else {
                     console.log(`Next Round`)
                     break
@@ -425,7 +420,7 @@ const CrazyEightsLogic = () => {
             case 5:
                 if (players[currentPlayerIndex].score >= 250) {
                     console.log(`Game over Player${currentPlayer.position} wins!`)
-                    emptyHands()
+                    endGame()
                 } else {
                     console.log(`Next Round`)
                     break
@@ -433,7 +428,7 @@ const CrazyEightsLogic = () => {
             case 6:
                 if (players[currentPlayerIndex].score >= 300) {
                     console.log(`Game over  Player${currentPlayer.position} wins!`)
-                    emptyHands()
+                    endGame()
                 } else {
                     console.log(`Next Round`)
                     break
@@ -441,7 +436,7 @@ const CrazyEightsLogic = () => {
             case 7:
                 if (players[currentPlayerIndex].score >= 350) {
                     console.log(`Game over Player${currentPlayer.position} wins!`)
-                    emptyHands()
+                    endGame()
                 } else {
                     console.log(`Next Round`)
                     break
@@ -457,7 +452,7 @@ const CrazyEightsLogic = () => {
             })}
             <button onClick={() => dealHands()}>1. Deal Cards</button>
             <button onClick={() => setTable()}>2. Set Table</button>
-            <button onClick={() => emptyHands()}>3. Empty Hands</button>
+            <button onClick={() => endGame()}>3. Empty Hands</button>
             <button onClick={() => checkWinner()}>4. Check Winner</button>
             <h1>Current suit: {currentSuit}</h1>
             <p>Players hand:</p>
