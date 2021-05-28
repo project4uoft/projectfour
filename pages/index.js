@@ -1,69 +1,146 @@
+// This is default start page with app logo and login buttons
 import Head from "next/head";
-import styles from '../styles/index.module.css';
-import { useUser } from '@auth0/nextjs-auth0';
+import styles from "../styles/index.module.css";
+import { useUser } from "@auth0/nextjs-auth0";
+import { useEffect } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { v4 as uuid } from "uuid";
+import { Container, Grid, Button } from "@material-ui/core";
+import { nanoid } from "nanoid";
 
 
-export default function Home() {
+export default function Home({}) {
+  // Get user info from userProvider context of auth0 library
   const { user, error, isLoading } = useUser();
+  const router = useRouter();
+
+
+
+  // on the first render and whenever user or loading state chaneges check if user is logged in.
+  // then redirect to game room page
+  useEffect(() => {
+    if (user) {
+      // generate room id using uuid package
+      const roomId = nanoid(6);
+      // redirect user to the games room with roomId and username inserted into url
+      router.push(`/welcome`);
+    }
+  }, [user, isLoading]);
+
+
+
   return (
     <div>
       <Head>
         <title>Party House</title>
       </Head>
-      <div className="container mx-auto">
-        <div className="grid grid-cols-2 gap-20">
-          <div className={styles.left}>
+
+      <Container maxWidth="lg" className={styles.container}>
+        <Grid container spacing={6}>
+          {/* Column1 */}
+          <Grid item xs={12} sm={6} md={6} lg={6}>
             <h1 className={styles.h1}>Party House</h1>
-            <img className={styles.logo} src='./assets/images/homepage/Logo1.png' alt='Logo' />
-            <h3 className={styles.h3}>Play games with friends from your home</h3>
-          </div>
+            <img
+              className={styles.logo}
+              src="./assets/images/homepage/Logo1.png"
+              alt="Logo"
+            />
+            <h3 className={styles.h3}>
+              Play games with friends from your home
+            </h3>
+          </Grid>
 
-          <div className={styles.outer}>
-            <img className={styles.below} src='./assets/images/homepage/cardstack.png' alt='card stack' />
+          {/* Column2 */}
+          <Grid item xs={12} sm={6} md={6} lg={6}>
+            <div className={styles.outer}>
+              <img
+                className={styles.below}
+                src="./assets/images/homepage/cardstack.png"
+                alt="card stack"
+              />
 
-            {/* <img src='./assets/images/homepage/cardtest.png' alt='card stack'/> */}
-            {/* test */}
+              {/* <img src='./assets/images/homepage/cardtest.png' alt='card stack'/> */}
 
-            <div className={styles.top}>
-{isLoading && <p>Loading login info...</p>}
+              <div className={styles.top}>
+                {isLoading && <p>Loading login info...</p>}
+                {error && (
+                  <>
+                    <h4>Error</h4>
+                    <pre>{error.message}</pre>
+                  </>
+                )}
+                <div className={styles.buttons}>
+                  <div className="grid grid-cols-1 gap-10">
+                    {!user ? (
+                      <>
+                        <div className={styles.vertical}>
+                          <Grid container spacing={6}>
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                              <Link href="/api/auth/login">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  variant="contained"
+                                  fullWidth
+                                  className={styles.button1}
+                                >
+                                  <span className={styles.font}>SIGN UP</span>
+                                </Button>
+                              </Link>
+                            </Grid>
 
-      {error && (
-        <>
-          <h4>Error</h4>
-          <pre>{error.message}</pre>
-        </>
-      )}
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                              <Link href="/api/auth/login">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  variant="contained"
+                                  fullWidth
+                                  className={styles.button2}
+                                >
+                                  <span className={styles.font}>LOGIN</span>
+                                </Button>
+                              </Link>
+                            </Grid>
 
-              <div className={styles.buttons}>
-                <div className="grid grid-cols-1 gap-10">
-                  {!user ? (
-                    <>
-                      <form action="/api/auth/login" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-gray-900 hover:bg-blue-900 text-white font-bold" value="Sign Up or Login" />
-                      </form>
-                      <form action="/api/auth/login" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-gray-900 hover:bg-blue-900 text-white font-bold" value="Guest" />
-                      </form>
-                    </>) : (
-                    <>
-
-                      <form action="/api/auth/logout" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-gray-900 hover:bg-blue-900 text-white font-bold" value="Log Out" />
-                      </form>
-                      <form action="/profile" className=" py-2 px-4 rounded">
-                        <input type="submit" className="bg-gray-900 hover:bg-blue-900 text-white font-bold" value="Profile" />
-                      </form>
-                    </>
-                  )}
+                            <Grid item xs={12} sm={12} md={12} lg={12}>
+                              <Link href="/api/auth/login">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  variant="contained"
+                                  fullWidth
+                                  className={styles.button3}
+                                >
+                                  <span className={styles.font}>GUEST</span>
+                                </Button>
+                              </Link>
+                            </Grid>
+                          </Grid>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/api/auth/logout">
+                          <button className="flex justify-center rounded hover:bg-grey">
+                            <img
+                              src=".././assets/images/homepage/GuestButton.png"
+                              alt="Guest"
+                            />
+                          </button>
+                        </Link>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-
             </div>
-
-          </div>
-        </div>
-      </div>
-    </div >
-
+          </Grid>
+        </Grid>
+      </Container>
+    </div>
   );
 }
+
+

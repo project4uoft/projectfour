@@ -1,16 +1,56 @@
-import gameRoomStyles from '../../../styles/GameRoom.module.css'
+import gameRoomStyles from "../../../styles/GameRoom.module.css";
+import { Drawer, Toolbar } from "@material-ui/core/";
+import GameOptions from "./GameOptions";
+import Chatroom from "./Chatroom";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
-import GameOptions from './GameOptions'
-import Chatroom from './Chatroom'
+const drawerWidth = 280;
 
 
-const SidePanel = ({handleClick}) => {
-    return(
-        <section className="flex flex-col rounded-md border-blue-900 bg-indigo-900 m-4">
-            <GameOptions handleClick={handleClick}/>
-            <Chatroom />
-        </section>
-    )
-}
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+    },
+    appBar: {
+      zIndex: theme.zIndex.drawer + 1,
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerPaper: {
+      width: drawerWidth,
+      background: "#3A4D85",
+    },
+    drawerContainer: {
+      overflow: "auto",
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+    },
+  })
+);
+
+const SidePanel = ({ gameTitle, handleClick }) => {
+  const classes = useStyles();
+  return (
+    <>
+      <Drawer
+        variant="permanent"
+        color="primary"
+        className={classes.drawer}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <Toolbar />
+        <GameOptions handleClick={handleClick} />
+        <Chatroom gameBoard={gameTitle} />
+      </Drawer>
+    </>
+  );
+};
 
 export default SidePanel;

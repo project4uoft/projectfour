@@ -1,19 +1,54 @@
-import Head from 'next/head'
+import PlayerPanel from "./player-panel/PlayerPanel";
+import GamePlayPanel from "./game-play-panel/GamePlayPanel.js";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
 
-import PlayerPanel from './player-panel/PlayerPanel'
-import GamePlayPanel  from './game-play-panel/GamePlayPanel.js'
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+    },
+  })
+);
 
-import styles from '../../../styles/GameRoom.module.css'
+const MainPanel = ({
+  gameTitle,
+  gameBoard,
+  player,
+  winners,
+  players,
+  roomId,
+  game,
+}) => {
+  console.log("gameboard: ", gameBoard);
 
 
 
-const MainPanel = ({gameTitle, gameBoard, player, winners}) => {
-    return (
-    <div className="flex flex-col w-full">
-        <GamePlayPanel gameTitle={gameTitle} player={player} gameBoard={gameBoard} winners={winners}/>
-        <PlayerPanel />
-    </div>
-  )
-}
+
+  const classes = useStyles();
+  return (
+    <>
+      <main className={classes.content}>
+        <Toolbar />
+        {gameBoard && gameBoard.players.length > 1 ? (
+          <>
+            <GamePlayPanel
+              gameTitle={gameTitle}
+              player={player}
+              gameBoard={gameBoard}
+              winners={winners}
+            />
+            <PlayerPanel players={players} roomId={roomId} game={game} />
+          </>
+        ) : (
+          <h1>{`Waiting for players to join ${gameBoard?.title} game...`}</h1>
+        )}
+      </main>
+    </>
+  );
+};
 
 export default MainPanel;
+
+

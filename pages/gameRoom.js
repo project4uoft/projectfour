@@ -1,31 +1,26 @@
-import React, { useState } from "react";
 
-import Head from 'next/head'
-import SidePanel from '../components/gameroom/side-panel/SidePanel'
-import MainPanel  from '../components/gameroom/main-panel/MainPanel.js'
-// import Nav from '../components/Nav'
+import SidePanel from "../components/gameroom/side-panel/SidePanel";
+import MainPanel from "../components/gameroom/main-panel/MainPanel.js";
+import Navbar from "../components/Navbar";
+import Meta from "../components/Meta";
 
-
-//CSS import 
-import styles from '../styles/Layout.module.css'
+import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0";
 
 
-export default function Home() {
-
-  const [currentGame, setCurrentGame] = useState()
-
-  function gameSelection(game) {
-    setCurrentGame(game)
+export default withPageAuthRequired(function GameRoom() {
+  const { user, error, isLoading } = useUser();
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
+  if (user) {
+    return (
+      <>
+        <Meta title="Game Room" />
+        <Navbar />
+        <div>
+          <SidePanel />
+          <MainPanel />
+        </div>
+      </>
+    );
   }
-  console.log("current game", currentGame)
-
-
-  return (
-    <>
-    <div className="flex flex-auto flex-row h-screen">
-        <SidePanel  gameSelection={gameSelection}/>
-        <MainPanel currentGame={currentGame}/>
-    </div>
-    </>
-  )
-}
+});
