@@ -1,4 +1,3 @@
-// This is the first component which gets run on start of app
 
 // Layout component just wraps all pages and adds meta information about app in html head tag
 import Layout from "../components/Layout";
